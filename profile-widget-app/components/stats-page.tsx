@@ -1,8 +1,11 @@
 import Image from 'next/image'
 import { Github } from 'lucide-react'
 import { Card } from '@/components/ui/card'
+import { fetchGitHubStats } from '@/lib/github'
 
-export default function StatsPage() {
+export default async function StatsPage() {
+  const stats = await fetchGitHubStats()
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-50 p-4">
       {/* Profile Section */}
@@ -31,7 +34,7 @@ export default function StatsPage() {
       {/* Stats Grid */}
       <div className="grid grid-cols-3 max-w-2xl mx-auto mb-16 gap-6">
         <Card className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 p-8 text-center">
-          <div className="text-3xl font-semibold mb-2">370</div>
+          <div className="text-3xl font-semibold mb-2">{stats.totalCommits}</div>
           <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">commits</div>
           <div className="font-bold text-xs text-yellow-500 font-medium">
             🏆 TOP 0.01%
@@ -61,7 +64,7 @@ export default function StatsPage() {
           Top Contributions
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {Array.from({ length: 3 }).map((_, i) => (
+          {stats.topContributions.map((contribution, i) => (
             <Card 
               key={i} 
               className="flex flex-col p-6 hover:shadow-md transition-shadow duration-200"
@@ -132,7 +135,7 @@ export default function StatsPage() {
 
       {/* Footer */}
       <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800">
-        <div className="max-w-2xl mx-auto py-4 px-6 flex items-center justify-between text-sm">
+        <div className="max-w-2xl mx-auto py-4 px-4 flex items-center justify-between text-sm">
           <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
             Powered by Greptile
             <span className="text-lg">🦎</span>

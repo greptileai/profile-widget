@@ -3,10 +3,11 @@
 import Image from 'next/image'
 import { Github } from 'lucide-react'
 import { Card } from '@/components/ui/card'
-// import { fetchGitHubStats } from '@/lib/github-actions'
 import { motion } from 'framer-motion'
 import GitHubCalendar from 'react-github-calendar'
 import { calculateScores } from '@/lib/calculate-scores'
+import { GitHubStats } from '@/types/github'
+
 // Animation variants
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -25,37 +26,21 @@ const staggerChildren = {
 export default function StatsPage({ 
   stats, 
   username,
-  tags 
+  tags,
+  topContributions,
+  highlights
 }: { 
-  stats: any, 
+  stats: GitHubStats, 
   username: string,
-  tags: string[]
+  tags: string[],
+  topContributions: any,
+  highlights: any
 }) {
-  // Static test data
-  const testStats = {
-    additions: 100,
-    deletions: 50
-  }
-
   const scores = calculateScores({
     totalCommits: stats.totalCommits,
     additions: stats.totalAdditions,
     deletions: stats.totalDeletions
   });
-
-  // const stats = await fetchGitHubStats(username)
-  const topContributions = [
-    {
-      repo: 'greptile/greptile',
-      description: 'Implemented auth and cured bugs that no one else could see',
-      date: '2 days ago'
-    },
-    {
-      repo: 'greptile/greptile',
-      description: 'Implemented auth and cured bugs that no one else could see',
-      date: '1 week ago'
-    }
-  ]
 
   return (
     <div className="bg-black w-full">
@@ -89,7 +74,15 @@ export default function StatsPage({
               <p className="text-gray-400">@{stats.login}</p>
             </div>
             <div className="absolute -top-16 left-1/2 -translate-x-1/2 opacity-100 pl-27">
-              <GitHubCalendar username={username} hideTotalCount={true} hideColorLegend={true} hideMonthLabels={true} blockSize={8} blockRadius={10} blockMargin={10}/>
+              <GitHubCalendar 
+                username={username} 
+                hideTotalCount={true} 
+                hideColorLegend={true} 
+                hideMonthLabels={true} 
+                blockSize={8} 
+                blockRadius={10} 
+                blockMargin={10}
+              />
             </div>
           </div>
           <div className="flex gap-3 text-[13px] text-gray-300 mt-6">
@@ -134,24 +127,29 @@ export default function StatsPage({
           <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
             Top Contributions
           </h2>
-          <div className="grid grid-cols-1 gap-3">
-            {topContributions.map((contribution, i) => (
+          <div className="grid grid-cols-3 gap-3">
+            {topContributions.slice(0, 6).map((contribution: any, i: any) => (
               <motion.div
                 key={i}
                 variants={fadeInUp}
+                className="h-40"
               >
-                <Card className="bg-gray-900/30 border-gray-800/50 p-4 hover:bg-gray-900/40 transition-colors">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Github className="w-4 h-4 text-gray-500" />
-                    <div className="text-sm">
-                      <span className="text-gray-300">greptile</span>
-                      <span className="text-gray-600">/</span>
-                      <span className="text-gray-300">greptile</span>
+                <Card className="bg-gray-900/30 border-gray-800/50 p-4 hover:bg-gray-900/40 transition-colors h-full flex flex-col">
+                  <p className="text-gray-300 text-sm flex-grow">
+                    {contribution.impact}
+                  </p>
+                  <div className="flex items-center gap-2 mt-2 pt-2 border-t border-gray-800/50">
+                    <Image 
+                      src="/assets/github-mark-white.png"
+                      alt="GitHub"
+                      width={16}
+                      height={16}
+                      className="opacity-50"
+                    />
+                    <div className="text-sm text-gray-400 truncate">
+                      {contribution.repo}
                     </div>
                   </div>
-                  <p className="text-gray-300 text-sm">
-                    {contribution.description}
-                  </p>
                 </Card>
               </motion.div>
             ))}
@@ -168,40 +166,26 @@ export default function StatsPage({
             Highlights
           </h2>
           <div className="grid grid-cols-2 gap-3">
-            <Card className="bg-[#1C1917]/50 border-gray-800/50 p-6 flex items-center justify-between">
-              <div>
-                <h3 className="text-lg text-white font-medium mb-2">Overview screen</h3>
-                <p className="text-sm text-gray-400">
-                  changes were deployed to production along with the new E2E cases.
-                </p>
-              </div>
-              <div className="relative w-16 h-16">
-                <Image
-                  src="/trophy-placeholder.png"
-                  alt="Trophy"
-                  width={64}
-                  height={64}
-                  className="opacity-80"
-                />
-              </div>
-            </Card>
-            <Card className="bg-[#0C1B2A]/50 border-blue-900/50 p-6 flex items-center justify-between">
-              <div>
-                <h3 className="text-lg text-white font-medium mb-2">
-                  Wrote <span className="text-white">9,000</span> lines
-                </h3>
-                <p className="text-sm text-gray-400">of PHP</p>
-              </div>
-              <div className="relative w-16 h-16">
-                <Image
-                  src="/shield-placeholder.png"
-                  alt="Shield"
-                  width={64}
-                  height={64}
-                  className="opacity-80"
-                />
-              </div>
-            </Card>
+            {highlights.map((highlight: any, i: any) => (
+              <Card 
+                key={i}
+                className={`${
+                  highlight.type === 'achievement' ? 'bg-[#1C1917]/50' : 'bg-[#0C1B2A]/50'
+                } border-gray-800/50 p-6 flex items-center justify-between`}
+              >
+                <div>
+                  <h3 className="text-lg text-white font-medium mb-2">
+                    {highlight.title}
+                  </h3>
+                  <p className="text-sm text-gray-400">
+                    {highlight.description}
+                  </p>
+                </div>
+                <div className="text-4xl">
+                  {highlight.icon}
+                </div>
+              </Card>
+            ))}
           </div>
         </motion.div>
 

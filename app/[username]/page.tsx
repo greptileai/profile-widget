@@ -1,6 +1,6 @@
 import StatsPage from "@/components/stats-page"
 import { fetchGitHubStats } from "@/lib/github-actions"
-import { generateTags } from "@/lib/ai-actions"
+import { generateTags, generateTopContributions, generateHighlights } from "@/lib/ai-actions"
 import { GitHubStats } from "@/types/github"
 
 interface Props {
@@ -11,11 +11,19 @@ interface Props {
 
 export default async function UserPage({ params }: Props) {
   const stats = await fetchGitHubStats(params.username)
-  const tags = await generateTags(stats.bio, stats.topRepositories)
+  
+  // Fetch all AI-generated content in parallel
+  const [tags, topContributions, highlights] = await Promise.all([
+    generateTags(stats.bio, stats.topRepositories),
+    generateTopContributions(stats.topRepositories),
+    generateHighlights(stats, stats.topRepositories)
+  ])
 
   return <StatsPage 
     username={params.username} 
     stats={stats} 
-    tags={tags} 
+    tags={tags}
+    topContributions={topContributions}
+    highlights={highlights}
   />
 }

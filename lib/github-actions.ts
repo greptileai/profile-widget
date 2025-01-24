@@ -29,13 +29,29 @@ export async function fetchGitHubStats(username: string): Promise<GitHubStats> {
                 primaryLanguage {
                   name
                 }
+                pushedAt
+                issues {
+                  totalCount
+                }
+                pullRequests {
+                  totalCount
+                }
+                languages(first: 3, orderBy: {field: SIZE, direction: DESC}) {
+                  nodes {
+                    name
+                    color
+                  }
+                }
                 defaultBranchRef {
                   target {
                     ... on Commit {
-                      history(since: "${oneYearAgo.toISOString()}", first: 25) {
+                      history(first: 10) {
                         nodes {
+                          message
+                          committedDate
                           additions
                           deletions
+                          changedFiles
                         }
                       }
                     }
@@ -44,6 +60,15 @@ export async function fetchGitHubStats(username: string): Promise<GitHubStats> {
               }
               contributions {
                 totalCount
+              }
+            }
+            contributionCalendar {
+              totalContributions
+              weeks {
+                contributionDays {
+                  contributionCount
+                  date
+                }
               }
             }
           }
@@ -94,6 +119,17 @@ export async function fetchGitHubStats(username: string): Promise<GitHubStats> {
             stars: repo.repository.stargazerCount,
             forks: repo.repository.forkCount,
             primaryLanguage: repo.repository.primaryLanguage?.name || null,
+            languages: repo.repository.languages?.nodes || [],
+            recentCommits: repo.repository.defaultBranchRef?.target?.history?.nodes?.map((commit: any) => ({
+              message: commit.message,
+              date: commit.committedDate,
+              additions: commit.additions,
+              deletions: commit.deletions,
+              changedFiles: commit.changedFiles
+            })) || [],
+            issues: repo.repository.issues?.totalCount || 0,
+            pullRequests: repo.repository.pullRequests?.totalCount || 0,
+            pushedAt: repo.repository.pushedAt
           })
         ),
       };

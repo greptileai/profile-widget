@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card'
 // import { fetchGitHubStats } from '@/lib/github-actions'
 import { motion } from 'framer-motion'
 import GitHubCalendar from 'react-github-calendar'
+import { calculateScores } from '@/lib/calculate-scores'
 // Animation variants
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -22,6 +23,18 @@ const staggerChildren = {
 }
 
 export default function StatsPage({ stats, username }: { stats: any, username: string }) {
+  // Static test data
+  const testStats = {
+    additions: 100,
+    deletions: 50
+  }
+
+  const scores = calculateScores({
+    totalCommits: stats.totalCommits,
+    additions: stats.totalAdditions,
+    deletions: stats.totalDeletions
+  });
+
   // const stats = await fetchGitHubStats(username)
   const topContributions = [
     {
@@ -84,10 +97,10 @@ export default function StatsPage({ stats, username }: { stats: any, username: s
           variants={staggerChildren}
         >
           {[
-            { value: '97', label: 'score', topPercent: '0.01', icon: '🏆' },
-            { value: stats.totalCommits, label: 'commits', topPercent: '0.01', icon: '🏆' },
-            { value: '99.1k', label: 'additions', topPercent: '1.3', icon: '🔥' },
-            { value: '9k', label: 'deletions', topPercent: '4.1', icon: '📈' }
+            { value: scores.score, label: 'Score', topPercent: scores.topPercentages.overall, icon: scores.icons.overall },
+            { value: stats.totalCommits, label: 'Commits', topPercent: scores.topPercentages.commits, icon: scores.icons.commits },
+            { value: `${(stats.totalAdditions / 1000).toFixed(1)}k`, label: 'Relevant additions', topPercent: scores.topPercentages.additions, icon: scores.icons.additions },
+            { value: `${(stats.totalDeletions / 1000).toFixed(1)}k`, label: 'Relevant deletions', topPercent: scores.topPercentages.deletions, icon: scores.icons.deletions }
           ].map((stat, i) => (
             <motion.div 
               key={i}

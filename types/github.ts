@@ -3,6 +3,8 @@ export interface GitHubStats {
     name: string;
     login: string;
     totalCommits: number;
+    totalAdditions: number;
+    totalDeletions: number;
     topRepositories: Array<{
       name: string;
       description: string;

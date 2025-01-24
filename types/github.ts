@@ -1,10 +1,11 @@
 export interface GitHubStats {
+    avatarUrl: string;
+    name: string;
+    login: string;
     totalCommits: number;
-    totalAdditions: number;
-    totalDeletions: number;
-    topContributions: Array<{
-      repoName: string;
+    topRepositories: Array<{
+      name: string;
       description: string;
-      timestamp: string;
+      commits: number;
     }>;
   }

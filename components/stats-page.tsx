@@ -41,19 +41,19 @@ export default function StatsPage({ stats, username }: { stats: any, username: s
       {/* Removing the decorative dots pattern div */}
 
       <motion.div 
-        className="relative z-10 max-w-3xl mx-auto px-4 py-8"
+        className="relative z-10 max-w-3xl mx-auto px-4 pt-8"
         initial="initial"
         animate="animate"
         variants={staggerChildren}
       >
         {/* Profile Section */}
         <motion.div 
-          className="mb-12 mt-16"
+          className="mb-8 mt-16"
           variants={fadeInUp}
         >
           <div className="relative h-[160px]">
-            <div className="absolute -top-4 left-0 right-0 z-20">
-              <div className="relative w-24 h-24 mb-2">
+            <div className="absolute top-2 left-0 right-0 z-20">
+              <div className="relative w-24 h-24 mb-1">
                 <Image
                   src={stats.avatarUrl || '/placeholder-avatar.png'}
                   alt={`${username}'s profile picture`}
@@ -62,14 +62,16 @@ export default function StatsPage({ stats, username }: { stats: any, username: s
                   className="rounded-full border-2 border-emerald-500/20"
                 />
               </div>
-              <h1 className="text-2xl text-white font-medium mb-1">{stats.name}</h1>
+              <h1 className="text-2xl text-white font-medium mb-0.5">
+                {stats.name}
+              </h1>
               <p className="text-gray-400">@{stats.login}</p>
             </div>
-            <div className="absolute -top-16 left-1/2 -translate-x-1/2 opacity-100 pl-28">
-              <GitHubCalendar username={username} hideTotalCount={true} hideColorLegend={true} hideMonthLabels={true}  />
+            <div className="absolute -top-16 left-1/2 -translate-x-1/2 opacity-100 pl-27">
+              <GitHubCalendar username={username} hideTotalCount={true} hideColorLegend={true} hideMonthLabels={true} blockSize={8} blockRadius={10} blockMargin={10}/>
             </div>
           </div>
-          <div className="flex gap-3 text-[13px] text-gray-300">
+          <div className="flex gap-3 text-[13px] text-gray-300 mt-6">
             <span>❤️ TypeScript Wizard</span>
             <span>⚛️ Reactjs Magician</span>
             <span>🦅 Design Systems</span>
@@ -78,7 +80,7 @@ export default function StatsPage({ stats, username }: { stats: any, username: s
 
         {/* Stats Grid */}
         <motion.div 
-          className="grid grid-cols-4 gap-8 mb-12"
+          className="grid grid-cols-4 gap-6 mb-6"
           variants={staggerChildren}
         >
           {[
@@ -104,13 +106,14 @@ export default function StatsPage({ stats, username }: { stats: any, username: s
 
         {/* Top Contributions */}
         <motion.div 
-          className="mb-12"
+          className="mb-6"
           variants={fadeInUp}
         >
-          <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-4">
+          <div className="h-px bg-gray-800/50 mb-6" />
+          <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
             Top Contributions
           </h2>
-          <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 gap-3">
             {topContributions.map((contribution, i) => (
               <motion.div
                 key={i}
@@ -132,6 +135,7 @@ export default function StatsPage({ stats, username }: { stats: any, username: s
               </motion.div>
             ))}
           </div>
+          <div className="h-px bg-gray-800/50 mt-6" />
         </motion.div>
 
         {/* Highlights */}
@@ -139,10 +143,10 @@ export default function StatsPage({ stats, username }: { stats: any, username: s
           className="pb-16"
           variants={fadeInUp}
         >
-          <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-4">
+          <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
             Highlights
           </h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             <Card className="bg-[#1C1917]/50 border-gray-800/50 p-6 flex items-center justify-between">
               <div>
                 <h3 className="text-lg text-white font-medium mb-2">Overview screen</h3>

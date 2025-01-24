@@ -22,7 +22,15 @@ const staggerChildren = {
   }
 }
 
-export default function StatsPage({ stats, username }: { stats: any, username: string }) {
+export default function StatsPage({ 
+  stats, 
+  username,
+  tags 
+}: { 
+  stats: any, 
+  username: string,
+  tags: string[]
+}) {
   // Static test data
   const testStats = {
     additions: 100,
@@ -85,9 +93,9 @@ export default function StatsPage({ stats, username }: { stats: any, username: s
             </div>
           </div>
           <div className="flex gap-3 text-[13px] text-gray-300 mt-6">
-            <span>❤️ TypeScript Wizard</span>
-            <span>⚛️ Reactjs Magician</span>
-            <span>🦅 Design Systems</span>
+            {tags.map((tag, index) => (
+              <span key={index}>{tag}</span>
+            ))}
           </div>
         </motion.div>
 
@@ -99,8 +107,8 @@ export default function StatsPage({ stats, username }: { stats: any, username: s
           {[
             { value: scores.score, label: 'Score', topPercent: scores.topPercentages.overall, icon: scores.icons.overall },
             { value: stats.totalCommits, label: 'Commits', topPercent: scores.topPercentages.commits, icon: scores.icons.commits },
-            { value: `${(stats.totalAdditions / 1000).toFixed(1)}k`, label: 'Relevant additions', topPercent: scores.topPercentages.additions, icon: scores.icons.additions },
-            { value: `${(stats.totalDeletions / 1000).toFixed(1)}k`, label: 'Relevant deletions', topPercent: scores.topPercentages.deletions, icon: scores.icons.deletions }
+            { value: `${(stats.totalAdditions / 1000).toFixed(1)}k`, label: 'Additions', topPercent: scores.topPercentages.additions, icon: scores.icons.additions },
+            { value: `${(stats.totalDeletions / 1000).toFixed(1)}k`, label: 'Deletions', topPercent: scores.topPercentages.deletions, icon: scores.icons.deletions }
           ].map((stat, i) => (
             <motion.div 
               key={i}

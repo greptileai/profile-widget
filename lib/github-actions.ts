@@ -20,7 +20,7 @@ export async function fetchGitHubStats(username: string): Promise<GitHubStats> {
           bio
           contributionsCollection(from: "${oneYearAgo.toISOString()}") {
             totalCommitContributions
-            commitContributionsByRepository(maxRepositories: 3) {
+            commitContributionsByRepository(maxRepositories: 10) {
               repository {
                 nameWithOwner
                 description
@@ -29,25 +29,21 @@ export async function fetchGitHubStats(username: string): Promise<GitHubStats> {
                 primaryLanguage {
                   name
                 }
-              }
-              contributions {
-                totalCount
-              }
-            }
-          }
-          repositories(first: 25, orderBy: {field: PUSHED_AT, direction: DESC}) {
-            nodes {
-              defaultBranchRef {
-                target {
-                  ... on Commit {
-                    history(since: "${oneYearAgo.toISOString()}", first: 25) {
-                      nodes {
-                        additions
-                        deletions
+                defaultBranchRef {
+                  target {
+                    ... on Commit {
+                      history(since: "${oneYearAgo.toISOString()}", first: 25) {
+                        nodes {
+                          additions
+                          deletions
+                        }
                       }
                     }
                   }
                 }
+              }
+              contributions {
+                totalCount
               }
             }
           }
@@ -84,11 +80,11 @@ export async function fetchGitHubStats(username: string): Promise<GitHubStats> {
         login: data.data.user.login,
         bio: data.data.user.bio || '',
         totalCommits: contributionsCollection.totalCommitContributions,
-        totalAdditions: data.data.user.repositories.nodes.reduce((sum: number, repo: any) => 
-          sum + (repo.defaultBranchRef?.target?.history?.nodes?.reduce((commitSum: number, commit: any) => 
+        totalAdditions: contributionsCollection.commitContributionsByRepository.reduce((sum: number, repo: any) => 
+          sum + (repo.repository.defaultBranchRef?.target?.history?.nodes?.reduce((commitSum: number, commit: any) => 
             commitSum + (commit?.additions || 0), 0) || 0), 0),
-        totalDeletions: data.data.user.repositories.nodes.reduce((sum: number, repo: any) => 
-          sum + (repo.defaultBranchRef?.target?.history?.nodes?.reduce((commitSum: number, commit: any) => 
+        totalDeletions: contributionsCollection.commitContributionsByRepository.reduce((sum: number, repo: any) => 
+          sum + (repo.repository.defaultBranchRef?.target?.history?.nodes?.reduce((commitSum: number, commit: any) => 
             commitSum + (commit?.deletions || 0), 0) || 0), 0),
         topRepositories: contributionsCollection.commitContributionsByRepository.map(
           (repo: any) => ({

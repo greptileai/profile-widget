@@ -75,8 +75,6 @@ export default function HomePage() {
           >
             Get your own →
           </motion.button>
-          <SignIn />
-
         </motion.form>
 
         {/* Preview Image */}

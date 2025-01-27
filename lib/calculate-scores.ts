@@ -1,3 +1,5 @@
+import { erf } from 'mathjs';
+
 interface GitHubStats {
   totalCommits?: number;
   additions?: number;
@@ -33,15 +35,15 @@ function getIconForScore(score: number): string {
 }
 
 export function calculateScores(stats: GitHubStats): ScoreMetrics {
-  // These thresholds can be adjusted based on your scoring criteria
-  const COMMIT_THRESHOLDS = [100, 500, 1000, 5000];
-  const ADDITIONS_THRESHOLDS = [1000, 10000, 50000, 100000];
-  const DELETIONS_THRESHOLDS = [500, 5000, 25000, 50000];
+  // Define means (previously median values)
+  const COMMIT_MEAN = 150;
+  const ADDITIONS_MEAN = 10000;
+  const DELETIONS_MEAN = 5000;
 
   // Calculate individual scores (0-100)
-  const commitScore = calculateMetricScore(stats.totalCommits || 0, COMMIT_THRESHOLDS);
-  const additionsScore = calculateMetricScore(stats.additions || 0, ADDITIONS_THRESHOLDS);
-  const deletionsScore = calculateMetricScore(stats.deletions || 0, DELETIONS_THRESHOLDS);
+  const commitScore = calculateMetricScore(stats.totalCommits || 0, COMMIT_MEAN);
+  const additionsScore = calculateMetricScore(stats.additions || 0, ADDITIONS_MEAN);
+  const deletionsScore = calculateMetricScore(stats.deletions || 0, DELETIONS_MEAN);
 
   // Calculate overall score (weighted average)
   const score = Math.round(
@@ -75,21 +77,19 @@ export function calculateScores(stats: GitHubStats): ScoreMetrics {
   };
 }
 
-function calculateMetricScore(value: number, thresholds: number[]): number {
-  const baseScore = 60; // Starting score
-  const remainingPoints = 40; // Points to distribute across thresholds
-  let score = baseScore;
-
-  for (let i = 0; i < thresholds.length; i++) {
-    if (value >= thresholds[i]) {
-      score += remainingPoints / thresholds.length;
-    }
-  }
-
-  return Math.round(Math.min(score, 100));
+function calculateMetricScore(value: number, mean: number): number {
+  const stdDev = mean * 0.6;  // Standard deviation as 60% of mean
+  const zScore = (value - mean) / stdDev;
+  
+  // Convert to probability using error function (erf)
+  const probability = ((1 + erf(zScore / Math.sqrt(2))) / 2) * 1.25;
+  const score = Math.round(probability * 100);
+  
+  return Math.min(score, 100);
 }
 
 function calculateTopPercentage(score: number): number {
-  // Convert score to top percentage (e.g., 95 score → top 5%)
-  return Number((100 - score).toFixed(2));
+  // Make the top percentage even more favorable by applying a bigger reduction
+  const topPercentage = (100 - score) * 0.7; // Reduced by 30% (previously 0.8)
+  return Math.max(1, Math.round(topPercentage));
 }

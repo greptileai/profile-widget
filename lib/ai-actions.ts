@@ -143,7 +143,7 @@ export async function generateHighlights(
       `).join('\n')}
 
     Generate 2 significant highlights that showcase the developer's achievements.
-    - Focus on the most meaningful changes and make them very unique and fun.`
+    - Focus on the most meaningful changes and make them very unique and fun. More concise and less wordy.`
 
   const { object } = await generateObject({
     model: openai("gpt-4o-mini"),

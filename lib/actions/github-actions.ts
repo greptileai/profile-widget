@@ -1,11 +1,28 @@
 "use server"
 
+import { auth } from "@/lib/auth"
 import { GitHubStats } from "@/types/github";
+import { headers } from 'next/headers'
 
-export async function fetchGitHubStats(username: string): Promise<GitHubStats> {
-    const headers = {
-      Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
-      'Content-Type': 'application/json',
+export async function fetchGitHubStats(username: string, isAuthenticated: boolean = false): Promise<GitHubStats> {
+    // Verify authentication state server-side
+    const session = await auth()
+    const isActuallyAuthenticated = !!session?.accessToken
+    
+    // Don't trust the client's isAuthenticated flag
+    if (isAuthenticated && !isActuallyAuthenticated) {
+        throw new Error('Unauthorized: Invalid authentication state')
+    }
+
+    const headersList = headers()
+    const userAgent = headersList.get('user-agent')
+    
+    const requestHeaders = {
+        'Content-Type': 'application/json',
+        'Authorization': isActuallyAuthenticated 
+            ? `Bearer ${session.accessToken}`
+            : `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
+        'User-Agent': userAgent || 'GitHub-Stats-App',
     };
   
     const oneYearAgo = new Date();
@@ -79,7 +96,7 @@ export async function fetchGitHubStats(username: string): Promise<GitHubStats> {
     try {
       const response = await fetch('https://api.github.com/graphql', {
         method: 'POST',
-        headers,
+        headers: requestHeaders,
         body: JSON.stringify({ 
           query,
           variables: { username }

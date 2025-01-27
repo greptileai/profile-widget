@@ -10,6 +10,7 @@ import { calculateScores } from '@/lib/calculate-scores'
 import { GitHubStats } from '@/types/github'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { SessionProvider } from "next-auth/react"
 
 // Animation variants
 const fadeInUp = {
@@ -240,13 +241,9 @@ export default function StatsPage({
               <span className="text-lg">🦎</span>
             </div>
             <div className="flex gap-4">
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-4 py-2 rounded-lg bg-gradient-to-r from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700 transition-all duration-300 text-white text-sm border border-gray-700/50 shadow-lg hover:shadow-gray-900/20 flex items-center gap-2 group"
-              >
-                <SignIn/>
-              </motion.button>
+              <SessionProvider>
+                <SignIn />
+              </SessionProvider>
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

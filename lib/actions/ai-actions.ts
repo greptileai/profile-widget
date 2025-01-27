@@ -155,3 +155,27 @@ export async function generateHighlights(
 
   return object.highlights;
 }
+
+export async function generateProgrammerArchtype(): Promise<string> {
+  const prompt = `Generate a unique and fun project idea for a developer to work on. Focus on the most meaningful changes and make them very unique and fun. More concise and less wordy.`
+
+  const { text } = await generateText({
+    model: openai("gpt-4o-mini"),
+    prompt
+  })
+
+  return text
+} 
+
+export async function generateNextProject(): Promise<string> {
+  const prompt = `Generate a unique and fun project idea for a developer to work on. Focus on the most meaningful changes and make them very unique and fun. More concise and less wordy.`
+
+  const { text } = await generateText({
+    model: openai("gpt-4o-mini"),
+    prompt
+  })
+
+  return text
+} 
+
+

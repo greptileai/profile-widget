@@ -1,6 +1,6 @@
 import StatsPage from "@/components/stats-page"
-import { fetchGitHubStats } from "@/lib/github-actions"
-import { generateTags, generateTopContributions, generateHighlights } from "@/lib/ai-actions"
+import { fetchGitHubStats } from "@/lib/actions/github-actions"
+import { generateTags, generateTopContributions, generateHighlights } from "@/lib/actions/ai-actions"
 import { GitHubStats } from "@/types/github"
 
 interface Props {

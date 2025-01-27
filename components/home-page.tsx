@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
+import SignIn from '@/components/sign-in'
 
 export default function HomePage() {
   const [username, setUsername] = useState('')
@@ -74,6 +75,8 @@ export default function HomePage() {
           >
             Get your own →
           </motion.button>
+          <SignIn />
+
         </motion.form>
 
         {/* Preview Image */}

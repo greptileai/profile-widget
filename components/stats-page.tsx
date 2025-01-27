@@ -1,12 +1,15 @@
 'use client'
 
 import Image from 'next/image'
-import { Github, Star, GitCommit, Plus, Minus } from 'lucide-react'
+import { Star, GitCommit, Plus, Minus, Search } from 'lucide-react'
 import { Card } from '@/components/ui/card'
+import SignIn from '@/components/sign-in'
 import { motion } from 'framer-motion'
 import GitHubCalendar from 'react-github-calendar'
 import { calculateScores } from '@/lib/calculate-scores'
 import { GitHubStats } from '@/types/github'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 // Animation variants
 const fadeInUp = {
@@ -36,6 +39,16 @@ export default function StatsPage({
   topContributions: any,
   highlights: any
 }) {
+  const router = useRouter();
+  const [searchUsername, setSearchUsername] = useState('');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchUsername.trim()) {
+      router.push(`/${searchUsername.trim()}`);
+    }
+  };
+
   const scores = calculateScores({
     totalCommits: stats.totalCommits,
     additions: stats.totalAdditions,
@@ -190,6 +203,32 @@ export default function StatsPage({
           </div>
         </motion.div>
 
+        {/* Search Friends */}
+        <motion.div 
+          className="pb-24"
+          variants={fadeInUp}
+        >
+          <div className="h-px bg-gray-800/50 mb-6" />
+          <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
+            Search Friends
+          </h2>
+          <form onSubmit={handleSearch} className="relative max-w-lg mx-auto">
+            <input
+              type="text"
+              value={searchUsername}
+              onChange={(e) => setSearchUsername(e.target.value)}
+              placeholder="Enter GitHub username..."
+              className="w-full px-6 py-4 rounded-xl bg-gray-900/30 border border-gray-800/50 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-transparent"
+            />
+            <button 
+              type="submit"
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 transition-colors"
+            >
+              <Search className="w-5 h-5 text-white" />
+            </button>
+          </form>
+        </motion.div>
+
         {/* Footer */}
         <motion.div 
           className="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm border-t border-gray-800/50"
@@ -206,7 +245,7 @@ export default function StatsPage({
                 whileTap={{ scale: 0.95 }}
                 className="px-4 py-2 rounded-lg bg-gradient-to-r from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700 transition-all duration-300 text-white text-sm border border-gray-700/50 shadow-lg hover:shadow-gray-900/20 flex items-center gap-2 group"
               >
-                <span>Sign in to see full stats 🔥</span>
+                <SignIn/>
               </motion.button>
               <motion.button 
                 whileHover={{ scale: 1.05 }}

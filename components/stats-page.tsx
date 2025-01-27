@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { Github } from 'lucide-react'
+import { Github, Star, GitCommit, Plus, Minus } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { motion } from 'framer-motion'
 import GitHubCalendar from 'react-github-calendar'
@@ -98,17 +98,18 @@ export default function StatsPage({
           variants={staggerChildren}
         >
           {[
-            { value: scores.score, label: 'Score', topPercent: scores.topPercentages.overall, icon: scores.icons.overall },
-            { value: stats.totalCommits, label: 'Commits', topPercent: scores.topPercentages.commits, icon: scores.icons.commits },
-            { value: `${(stats.totalAdditions / 1000).toFixed(1)}k`, label: 'Additions', topPercent: scores.topPercentages.additions, icon: scores.icons.additions },
-            { value: `${(stats.totalDeletions / 1000).toFixed(1)}k`, label: 'Deletions', topPercent: scores.topPercentages.deletions, icon: scores.icons.deletions }
+            { value: scores.score, label: 'Score', topPercent: scores.topPercentages.overall, icon: scores.icons.overall, lucideIcon: Star },
+            { value: stats.totalCommits, label: 'Commits', topPercent: scores.topPercentages.commits, icon: scores.icons.commits, lucideIcon: GitCommit },
+            { value: `${(stats.totalAdditions / 1000).toFixed(1)}k`, label: 'Additions', topPercent: scores.topPercentages.additions, icon: scores.icons.additions, lucideIcon: Plus },
+            { value: `${(stats.totalDeletions / 1000).toFixed(1)}k`, label: 'Deletions', topPercent: scores.topPercentages.deletions, icon: scores.icons.deletions, lucideIcon: Minus }
           ].map((stat, i) => (
             <motion.div 
               key={i}
               variants={fadeInUp}
             >
               <div className="flex flex-col">
-                <div className="text-3xl text-white font-semibold mb-1">{stat.value}</div>
+                <stat.lucideIcon className="w-8 h-8 text-gray-400 mb-2" />
+                <div className="text-3xl text-white font-semibold">{stat.value}</div>
                 <div className="text-sm text-gray-400 mb-1">{stat.label}</div>
                 <div className="text-xs font-medium" style={{ color: i === 3 ? '#10B981' : '#EAB308' }}>
                   {stat.icon} TOP {stat.topPercent}%

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import SignIn from '@/components/sign-in'
+import Link from 'next/link'
 
 export default function HomePage() {
   const [username, setUsername] = useState('')
@@ -26,17 +26,14 @@ export default function HomePage() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="mb-8"
         >
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="white">
-            {/* Placeholder tooth/stats logo */}
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-          </svg>
+          <img src="/assets/greptile-logo.png" alt="Greptile Logo" width={56} height={56} />
         </motion.div>
 
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-4xl sm:text-5xl font-normal text-center mb-4 text-white"
+          className="text-3xl sm:text-4xl font-normal text-center mb-4 text-white"
         >
           Create Stats Widget from Github Profile
         </motion.h1>
@@ -89,18 +86,17 @@ export default function HomePage() {
         </motion.div>
 
         {/* Powered by Footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-8 text-gray-500 flex items-center gap-2"
-        >
-          Powered by Greptile
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            {/* Placeholder tooth logo */}
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-          </svg>
-        </motion.div>
+        <Link href="https://greptile.com">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="mt-8 text-gray-500 flex items-center gap-2"
+          >
+            Powered by Greptile
+            <img src="/assets/greptile-logo.png" alt="Greptile Logo" width={24} height={24} />
+          </motion.div>
+        </Link>
       </div>
     </div>
   )

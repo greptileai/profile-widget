@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { SessionProvider } from "next-auth/react"
 import { ProjectIdea } from '@/lib/actions/ai-actions'
+import Link from 'next/link'
 
 // Animation variants
 const fadeInUp = {
@@ -557,10 +558,12 @@ export default function StatsPage({
           variants={fadeInUp}
         >
           <div className="max-w-3xl mx-auto py-4 px-4 flex items-center justify-between">
-            <div className="flex items-center gap-2 text-gray-400">
-              Powered by Greptile
-              <span className="text-lg">🦎</span>
-            </div>
+            <Link href="https://greptile.com">
+              <div className="flex items-center gap-2 text-gray-400">
+                Powered by Greptile
+                <img src="/assets/greptile-logo.png" alt="Greptile Logo" width={24} height={24} />
+              </div>
+            </Link>
             <div className="flex gap-4">
               <SessionProvider>
                 <SignIn />
@@ -570,7 +573,7 @@ export default function StatsPage({
                 whileTap={{ scale: 0.95 }}
                 className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 transition-colors text-white text-sm"
               >
-                Get your widget →
+                Get your widget ✨
               </motion.button>
             </div>
           </div>

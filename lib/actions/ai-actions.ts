@@ -160,7 +160,7 @@ const ArchetypeSchema = z.object({
   powerMove: z.string()
 });
 
-export async function generateProgrammerArchtype(stats: any, repositories: any): Promise<typeof ARCHETYPES[keyof typeof ARCHETYPES] & { description: string }> {
+export async function generateProgrammerArchtype(stats: any, repositories: any): Promise<typeof ARCHETYPES[keyof typeof ARCHETYPES] & { description: string, powerMove: string }> {
   const prompt = `Based on these GitHub statistics and repositories:
     - Total Commits: ${stats.totalCommits}
     - Lines Added: ${stats.totalAdditions}

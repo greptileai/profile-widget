@@ -151,7 +151,6 @@ export async function fetchGitHubStats(username: string, isAuthenticated: boolea
         ),
       };
       
-      console.log(results);
       return results;
     } catch (error) {
       console.error('Error fetching GitHub stats:', error);

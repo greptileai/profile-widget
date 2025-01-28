@@ -27,6 +27,18 @@ const staggerChildren = {
   }
 }
 
+const rainbowText = {
+  initial: { color: '#FFFFFF' },
+  animate: {
+    color: ['#FFFFFF', '#FEF08A', '#86EFAC', '#93C5FD', '#F9A8D4', '#FFFFFF'],
+    transition: {
+      duration: 10,
+      repeat: Infinity,
+      ease: "linear"
+    }
+  }
+}
+
 export default function StatsPage({ 
   stats, 
   username,
@@ -112,7 +124,7 @@ export default function StatsPage({
           variants={staggerChildren}
         >
           {[
-            { value: scores.score, label: 'Score', topPercent: scores.topPercentages.overall, icon: scores.icons.overall, lucideIcon: Star },
+            { value: scores.score, label: 'Score', topPercent: scores.topPercentages.overall, icon: scores.icons.overall, lucideIcon: Star, textVariants: rainbowText },
             { value: stats.totalCommits, label: 'Commits', topPercent: scores.topPercentages.commits, icon: scores.icons.commits, lucideIcon: GitCommit },
             { value: `${(stats.totalAdditions / 1000).toFixed(1)}k`, label: 'Additions', topPercent: scores.topPercentages.additions, icon: scores.icons.additions, lucideIcon: Plus },
             { value: `${(stats.totalDeletions / 1000).toFixed(1)}k`, label: 'Deletions', topPercent: scores.topPercentages.deletions, icon: scores.icons.deletions, lucideIcon: Minus }
@@ -123,7 +135,12 @@ export default function StatsPage({
             >
               <div className="flex flex-col">
                 <stat.lucideIcon className="w-8 h-8 text-gray-400 mb-2" />
-                <div className="text-3xl text-white font-semibold">{stat.value}</div>
+                <motion.div 
+                  className="text-3xl text-white font-semibold"
+                  variants={stat.textVariants}
+                  initial="initial"
+                  animate="animate"
+                >{stat.value}</motion.div>
                 <div className="text-sm text-gray-400 mb-1">{stat.label}</div>
                 <div className="text-xs font-medium" style={{ color: i === 3 ? '#10B981' : '#EAB308' }}>
                   {stat.icon} TOP {stat.topPercent}%

@@ -31,7 +31,7 @@ export async function generateTags(bio: string, repositories: any): Promise<stri
 
     Generate exactly 3 short, emoji-prefixed tags that best describe this developer's expertise and interests. 
     Format each tag like "emoji Technology/Skill". Example format: "⚛️ React Expert"
-    Keep each tag under 20 characters.`
+    Keep each tag under 20 characters. Make sure to not have - in the tag.`
 
   const { text } = await generateText({
     model: openai("gpt-4o-mini"),
@@ -59,7 +59,7 @@ export async function generateTopContributions(repositories: any): Promise<Contr
     Generate 6 significant contributions that highlight the developer's best work. For each contribution:
     Summarize the impact in one clear sentence. When describing impact focus on the actions, improvements, and impact rather than referencing "the developer". Add a relevant emoji to the impact.
     - For example 'Implemented auth and cured bugs that no one else could see' like be creative.
-    Focus on the most meaningful changes`
+    Focus on the most meaningful changes. Keep the impact under 130 characters.`
 
   const { object } = await generateObject({
     model: openai("gpt-4o-mini"),

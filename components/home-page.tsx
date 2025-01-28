@@ -74,17 +74,6 @@ export default function HomePage() {
           </motion.button>
         </motion.form>
 
-        {/* Preview Image */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-          className="w-full max-w-4xl mx-auto rounded-lg border border-gray-800 bg-[#111111] p-8"
-        >
-          {/* Placeholder for the stats preview image */}
-          <div className="aspect-[16/9] w-full bg-[#0d1117] rounded-lg"></div>
-        </motion.div>
-
         {/* Powered by Footer */}
         <Link href="https://greptile.com">
           <motion.div

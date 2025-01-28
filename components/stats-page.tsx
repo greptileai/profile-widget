@@ -81,7 +81,6 @@ export default function StatsPage({
   const router = useRouter();
   const [searchUsername, setSearchUsername] = useState('');
   const [currentUrl, setCurrentUrl] = useState('');
-  const [showCopiedAlert, setShowCopiedAlert] = useState(false);
 
   useEffect(() => {
     setCurrentUrl(window.location.href);
@@ -500,8 +499,7 @@ export default function StatsPage({
                   <motion.button 
                     onClick={() => {
                       navigator.clipboard.writeText(currentUrl);
-                      setShowCopiedAlert(true);
-                      setTimeout(() => setShowCopiedAlert(false), 2000);
+                      alert('Copied to clipboard! ✨');
                     }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -510,17 +508,6 @@ export default function StatsPage({
                     Copy your profile link
                     <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
                   </motion.button>
-                  
-                  {showCopiedAlert && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="absolute left-1/2 -translate-x-1/2 -bottom-12 px-4 py-2 rounded-lg bg-emerald-500/20 text-emerald-400 text-sm whitespace-nowrap"
-                    >
-                      Copied to clipboard! ✨
-                    </motion.div>
-                  )}
                 </div>
 
                 <motion.a

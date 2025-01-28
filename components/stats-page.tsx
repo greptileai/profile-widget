@@ -9,8 +9,9 @@ import GitHubCalendar from 'react-github-calendar'
 import { calculateScores } from '@/lib/calculate-scores'
 import { GitHubStats } from '@/types/github'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { SessionProvider } from "next-auth/react"
+import { ProjectIdea } from '@/lib/actions/ai-actions'
 
 // Animation variants
 const fadeInUp = {
@@ -44,21 +45,51 @@ export default function StatsPage({
   username,
   tags,
   topContributions,
-  highlights
+  highlights,
+  archetype,
+  nextProject,
+  achillesHeel
 }: { 
   stats: GitHubStats, 
   username: string,
   tags: string[],
   topContributions: any,
-  highlights: any
+  highlights: any,
+  archetype: {
+    title: string;
+    icon: string;
+    description: string;
+    color: {
+      from: string;
+      to: string;
+    };
+    powerMove: string;
+  },
+  nextProject: ProjectIdea,
+  achillesHeel: {
+    title: string;
+    icon: string;
+    color: {
+      from: string;
+      to: string;
+    };
+    description: string;
+    quickTip: string;
+  }
 }) {
   const router = useRouter();
   const [searchUsername, setSearchUsername] = useState('');
+  const [currentUrl, setCurrentUrl] = useState('');
+  const [showCopiedAlert, setShowCopiedAlert] = useState(false);
+
+  useEffect(() => {
+    setCurrentUrl(window.location.href);
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchUsername.trim()) {
-      router.push(`/${searchUsername.trim()}`);
+      router.push(`/${searchUsername.trim()}`, { scroll: true });
     }
   };
 
@@ -132,6 +163,9 @@ export default function StatsPage({
             <motion.div 
               key={i}
               variants={fadeInUp}
+              onClick={(e) => e.preventDefault()}
+              role="presentation"
+              className="cursor-default"
             >
               <div className="flex flex-col">
                 <stat.lucideIcon className="w-8 h-8 text-gray-400 mb-2" />
@@ -191,7 +225,7 @@ export default function StatsPage({
 
         {/* Highlights */}
         <motion.div 
-          className="pb-16"
+          className="pb-8"
           variants={fadeInUp}
         >
           <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
@@ -221,31 +255,301 @@ export default function StatsPage({
           </div>
         </motion.div>
 
-        {/* Search Friends */}
+        {/* Developer Archetype */}
         <motion.div 
-          className="pb-24"
+          className="pb-8"
           variants={fadeInUp}
         >
           <div className="h-px bg-gray-800/50 mb-6" />
           <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
-            Search Friends
+            Developer Archetype
           </h2>
-          <form onSubmit={handleSearch} className="relative max-w-lg mx-auto">
-            <input
-              type="text"
-              value={searchUsername}
-              onChange={(e) => setSearchUsername(e.target.value)}
-              placeholder="Enter GitHub username..."
-              className="w-full px-6 py-4 rounded-xl bg-gray-900/30 border border-gray-800/50 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-transparent"
+          <Card className="bg-gray-900/40 border-gray-800/50 p-8 overflow-hidden relative h-[200px]">
+            <div 
+              className="absolute inset-0 opacity-10"
+              style={{
+                background: `linear-gradient(135deg, ${archetype.color.from}, ${archetype.color.to})`
+              }}
             />
-            <button 
-              type="submit"
-              className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 transition-colors"
+            
+            <div className="relative flex items-start gap-6 h-full">
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gray-800/50 border border-gray-700/50 flex items-center justify-center"
+                style={{
+                  background: `linear-gradient(135deg, ${archetype.color.from}20, ${archetype.color.to}20)`
+                }}
+              >
+                <span className="text-4xl">
+                  {archetype.icon}
+                </span>
+              </motion.div>
+
+              <div className="flex-grow">
+                <motion.h3 
+                  className="text-xl font-semibold"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  style={{
+                    background: `linear-gradient(to right, ${archetype.color.from}, ${archetype.color.to})`,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent'
+                  }}
+                >
+                  {archetype.title}
+                </motion.h3>
+                <motion.p 
+                  className="text-gray-400 mt-2"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  {archetype.description}
+                </motion.p>
+              </div>
+            </div>
+
+            <motion.div 
+              className="absolute bottom-8 left-8 right-8 pt-4 border-t border-gray-800/30"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.4 }}
             >
-              <Search className="w-5 h-5 text-white" />
-            </button>
-          </form>
+              <div className="text-sm">
+                <span className="text-gray-500">Power Move: </span>
+                <span className="text-gray-400">{archetype.powerMove}</span>
+              </div>
+            </motion.div>
+          </Card>
         </motion.div>
+
+        {/* Development Quirk */}
+        <motion.div 
+          className="pb-8"
+          variants={fadeInUp}
+        >
+          <div className="h-px bg-gray-800/50 mb-6" />
+          <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
+            Development Quirk
+          </h2>
+          <Card className="bg-gray-900/40 border-gray-800/50 p-8 overflow-hidden relative h-[200px]">
+            <div 
+              className="absolute inset-0 opacity-10"
+              style={{
+                background: `linear-gradient(135deg, ${achillesHeel.color.from}, ${achillesHeel.color.to})`
+              }}
+            />
+            
+            <div className="relative flex items-start gap-6 h-full">
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gray-800/50 border border-gray-700/50 flex items-center justify-center"
+                style={{
+                  background: `linear-gradient(135deg, ${achillesHeel.color.from}20, ${achillesHeel.color.to}20)`
+                }}
+              >
+                <span className="text-4xl">
+                  {achillesHeel.icon}
+                </span>
+              </motion.div>
+
+              <div className="flex-grow">
+                <motion.h3 
+                  className="text-xl font-semibold"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  style={{
+                    background: `linear-gradient(to right, ${achillesHeel.color.from}, ${achillesHeel.color.to})`,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent'
+                  }}
+                >
+                  {achillesHeel.title}
+                </motion.h3>
+                <motion.p 
+                  className="text-gray-400 mt-2"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  {achillesHeel.description}
+                </motion.p>
+              </div>
+            </div>
+
+            <motion.div 
+              className="absolute bottom-8 left-8 right-8 pt-4 border-t border-gray-800/30"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              <div className="text-sm">
+                <span className="text-gray-500">Quick Tip: </span>
+                <span className="text-gray-400">{achillesHeel.quickTip}</span>
+              </div>
+            </motion.div>
+          </Card>
+        </motion.div>
+
+        {/* Next Project Idea */}
+        <motion.div 
+          className="pb-8"
+          variants={fadeInUp}
+        >
+          <div className="h-px bg-gray-800/50 mb-6" />
+          <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
+            Next Project Idea
+          </h2>
+          <Card className="bg-gray-900/40 border-gray-800/50 p-8">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-semibold text-white">
+                  {nextProject.name}
+                </h3>
+                <span className="px-3 py-1 rounded-full text-xs font-medium" 
+                  style={{
+                    backgroundColor: nextProject.difficulty === 'Beginner' ? '#059669' :
+                                   nextProject.difficulty === 'Intermediate' ? '#D97706' :
+                                   '#DC2626',
+                    color: 'white'
+                  }}
+                >
+                  {nextProject.difficulty}
+                </span>
+              </div>
+              
+              <p className="text-gray-400">
+                {nextProject.description}
+              </p>
+
+              <div className="flex gap-2">
+                {nextProject.techStack.map((tech, i) => (
+                  <span 
+                    key={i}
+                    className="px-2 py-1 rounded-md bg-gray-800/50 text-gray-300 text-sm"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              <div>
+                <h4 className="text-sm font-medium text-gray-300 mb-2">Main Features:</h4>
+                <ul className="list-disc list-inside text-gray-400 text-sm space-y-1">
+                  {nextProject.mainFeatures.map((feature, i) => (
+                    <li key={i}>{feature}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </Card>
+        </motion.div>
+
+        {/* Search */}
+        <motion.div 
+          className="pb-32"
+          variants={fadeInUp}
+        >
+          <div className="h-px bg-gray-800/50 mb-8" />
+          <div className="max-w-2xl mx-auto">
+            <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-4">
+              Look Up Your Friends
+            </h2>
+            <div className="text-gray-400 text-base mb-8 leading-relaxed">
+              Curious how your GitHub activity compares to your friends? Look them up and share your results to start a friendly competition! 🚀
+            </div>
+            <form onSubmit={handleSearch} className="relative mb-8">
+              <input
+                type="text"
+                value={searchUsername}
+                onChange={(e) => setSearchUsername(e.target.value)}
+                placeholder="Enter your friend's GitHub username..."
+                className="w-full px-8 py-5 rounded-2xl bg-gray-900/30 border border-gray-800/50 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-transparent text-lg"
+              />
+              <button 
+                type="submit"
+                className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 transition-colors group"
+              >
+                <Search className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+              </button>
+            </form>
+
+            {/* New Share Section */}
+            <motion.div 
+              className="text-center border-t border-gray-800/50 pt-8"
+              variants={fadeInUp}
+            >
+              <motion.p 
+                className="text-gray-400 mb-4"
+                variants={fadeInUp}
+              >
+                Share your GitHub story with others
+              </motion.p>
+              <motion.div 
+                className="flex items-center justify-center gap-4"
+                variants={fadeInUp}
+              >
+                <div className="relative">
+                  <motion.button 
+                    onClick={() => {
+                      navigator.clipboard.writeText(currentUrl);
+                      setShowCopiedAlert(true);
+                      setTimeout(() => setShowCopiedAlert(false), 2000);
+                    }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gray-800/50 hover:bg-gray-800 text-emerald-400 hover:text-emerald-300 text-sm transition-all duration-200 group"
+                  >
+                    Copy your profile link
+                    <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
+                  </motion.button>
+                  
+                  {showCopiedAlert && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute left-1/2 -translate-x-1/2 -bottom-12 px-4 py-2 rounded-lg bg-emerald-500/20 text-emerald-400 text-sm whitespace-nowrap"
+                    >
+                      Copied to clipboard! ✨
+                    </motion.div>
+                  )}
+                </div>
+
+                <motion.a
+                  href={`https://twitter.com/intent/tweet?text=Check out my Github stats!&url=${encodeURIComponent(currentUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#1DA1F2]/10 hover:bg-[#1DA1F2]/20 text-[#1DA1F2] text-sm transition-all duration-200 group"
+                >
+                  Share on X
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
+                </motion.a>
+
+                <motion.a
+                  href="/widget"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 hover:text-amber-300 text-sm transition-all duration-200 group"
+                >
+                  Get GitHub Widget
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
+                </motion.a>
+              </motion.div>
+            </motion.div>
+          </div>
+        </motion.div>
+        
 
         {/* Footer */}
         <motion.div 
@@ -266,7 +570,7 @@ export default function StatsPage({
                 whileTap={{ scale: 0.95 }}
                 className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 transition-colors text-white text-sm"
               >
-                Get your own →
+                Get your widget →
               </motion.button>
             </div>
           </div>

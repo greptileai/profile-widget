@@ -37,7 +37,7 @@ export async function fetchGitHubStats(username: string, isAuthenticated: boolea
           bio
           contributionsCollection(from: "${oneYearAgo.toISOString()}") {
             totalCommitContributions
-            commitContributionsByRepository(maxRepositories: 10) {
+            commitContributionsByRepository(maxRepositories: 12) {
               repository {
                 nameWithOwner
                 description
@@ -62,7 +62,7 @@ export async function fetchGitHubStats(username: string, isAuthenticated: boolea
                 defaultBranchRef {
                   target {
                     ... on Commit {
-                      history(first: 10) {
+                      history(first: 70) {
                         nodes {
                           message
                           committedDate

@@ -158,8 +158,8 @@ export default function StatsPage({
           {[
             { value: scores.score, label: 'Score', topPercent: scores.topPercentages.overall, icon: scores.icons.overall, lucideIcon: Star, textVariants: rainbowText },
             { value: stats.totalCommits, label: 'Commits', topPercent: scores.topPercentages.commits, icon: scores.icons.commits, lucideIcon: GitCommit },
-            { value: `${(stats.totalAdditions / 1000).toFixed(1)}k`, label: 'Additions', topPercent: scores.topPercentages.additions, icon: scores.icons.additions, lucideIcon: Plus },
-            { value: `${(stats.totalDeletions / 1000).toFixed(1)}k`, label: 'Deletions', topPercent: scores.topPercentages.deletions, icon: scores.icons.deletions, lucideIcon: Minus }
+            { value: `${(stats.totalAdditions >= 1000000 ? (stats.totalAdditions / 1000000).toFixed(1) + 'M' : (stats.totalAdditions / 1000).toFixed(1) + 'k')}`, label: 'Additions', topPercent: scores.topPercentages.additions, icon: scores.icons.additions, lucideIcon: Plus },
+            { value: `${(stats.totalDeletions >= 1000000 ? (stats.totalDeletions / 1000000).toFixed(1) + 'M' : (stats.totalDeletions / 1000).toFixed(1) + 'k')}`, label: 'Deletions', topPercent: scores.topPercentages.deletions, icon: scores.icons.deletions, lucideIcon: Minus }
           ].map((stat, i) => (
             <motion.div 
               key={i}

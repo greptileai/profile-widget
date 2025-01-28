@@ -8,7 +8,6 @@ import {
   generateNextProject,
   generateAchillesHeel
 } from "@/lib/actions/ai-actions"
-import { GitHubStats } from "@/types/github"
 import { auth } from "@/lib/auth"
 
 interface Props {
@@ -39,9 +38,8 @@ export default async function UserPage({ params }: Props) {
     tags={tags}
     topContributions={topContributions}
     highlights={highlights}
-    archetype={archetype}
+    archetype={archetype as any}
     nextProject={nextProject}
     achillesHeel={achillesHeel}
-    isAuthenticated={isAuthenticated}
   />
 }

@@ -23,11 +23,11 @@ const ContributionSchema = z.object({
   impact: z.string()
 });
 
-export async function generateTags(bio: string, repositories: Array<{ description: string, name: string }>): Promise<string[]> {
+export async function generateTags(bio: string, repositories: any): Promise<string[]> {
   const prompt = `Based on this GitHub profile:
     Bio: ${bio}
     Top Repositories:
-    ${repositories.map(repo => `- ${repo.name}: ${repo.description}`).join('\n')}
+    ${repositories.map((repo: any) => `- ${repo.name}: ${repo.description}`).join('\n')}
 
     Generate exactly 3 short, emoji-prefixed tags that best describe this developer's expertise and interests. 
     Format each tag like "emoji Technology/Skill". Example format: "⚛️ React Expert"
@@ -44,30 +44,15 @@ export async function generateTags(bio: string, repositories: Array<{ descriptio
     .slice(0, 3)
 }
 
-export async function generateTopContributions(
-  repositories: Array<{
-    name: string;
-    description: string;
-    commits: number;
-    stars: number;
-    primaryLanguage: string | null;
-    languages: Array<{ name: string; color: string }>;
-    recentCommits: Array<{
-      message: string;
-      date: string;
-      additions: number;
-      deletions: number;
-    }>;
-  }>
-): Promise<Contribution[]> {
+export async function generateTopContributions(repositories: any): Promise<Contribution[]> {
   const prompt = `Analyze these GitHub repositories and their commit history:
-    ${repositories.map(repo => `
+    ${repositories.map((repo: any) => `
     Repository: ${repo.name}
     Description: ${repo.description}
     Commits: ${repo.commits}
     Stars: ${repo.stars}
     Primary Language: ${repo.primaryLanguage}
-    Recent commits: ${repo.recentCommits?.map(commit => 
+    Recent commits: ${repo.recentCommits?.map((commit: any) => 
       `- ${commit.message} (${commit.additions} additions, ${commit.deletions} deletions)`
     ).join('\n')}`).join('\n')}
 
@@ -85,8 +70,8 @@ export async function generateTopContributions(
   });
   
   // Map the AI response to include the original repository's languages
-  return object.contributions.map(contribution => {
-    const repo = repositories.find(r => r.name === contribution.repo);
+  return object.contributions.map((contribution: any) => {
+    const repo = repositories.find((r: any) => r.name === contribution.repo);
     return {
       ...contribution,
       languages: repo?.languages || []
@@ -101,45 +86,25 @@ const HighlightSchema = z.object({
   icon: z.string()
 });
 
-export async function generateHighlights(
-  stats: {
-    totalCommits: number;
-    totalAdditions: number;
-    totalDeletions: number;
-  },
-  repositories: Array<{
-    name: string;
-    description: string;
-    commits: number;
-    stars: number;
-    primaryLanguage: string | null;
-    languages: Array<{ name: string; color: string }>;
-    recentCommits: Array<{
-      message: string;
-      date: string;
-      additions: number;
-      deletions: number;
-    }>;
-  }>
-): Promise<Highlight[]> {
+export async function generateHighlights(stats: any, repositories: any): Promise<Highlight[]> {
   const prompt = `Based on these GitHub statistics, repositories, and commit history:
     - Total Commits: ${stats.totalCommits}
     - Lines Added: ${stats.totalAdditions}
     - Lines Deleted: ${stats.totalDeletions}
-    - Top Languages: ${repositories.flatMap(repo => 
-        repo.languages?.map(lang => lang.name)
+    - Top Languages: ${repositories.flatMap((repo: any) => 
+        repo.languages?.map((lang: any) => lang.name)
       ).filter(Boolean).join(', ')}
     - Most Starred Repo: ${repositories[0]?.stars || 0} stars
-      ${repositories.map(repo => `
+      ${repositories.map((repo: any) => `
       Repository: ${repo.name}
       Description: ${repo.description}
       Commits: ${repo.commits}
       Stars: ${repo.stars}
       Primary Language: ${repo.primaryLanguage}
-      Recent commits: ${repo.recentCommits?.map(commit => 
+      Recent commits: ${repo.recentCommits?.map((commit: any) => 
         `- ${commit.message} (${commit.additions} additions, ${commit.deletions} deletions)`
       ).join('\n')}
-      Languages: ${repo.languages?.map(lang => lang.name).join(', ')}
+      Languages: ${repo.languages?.map((lang: any) => lang.name).join(', ')}
       `).join('\n')}
 
     Generate 2 significant highlights that showcase the developer's achievements.
@@ -195,30 +160,16 @@ const ArchetypeSchema = z.object({
   powerMove: z.string()
 });
 
-export async function generateProgrammerArchtype(
-  stats: {
-    totalCommits: number;
-    totalAdditions: number;
-    totalDeletions: number;
-  },
-  repositories: Array<{
-    name: string;
-    description: string;
-    commits: number;
-    stars: number;
-    primaryLanguage: string | null;
-    languages: Array<{ name: string; color: string }>;
-  }>
-): Promise<typeof ARCHETYPES[keyof typeof ARCHETYPES] & { description: string }> {
+export async function generateProgrammerArchtype(stats: any, repositories: any): Promise<typeof ARCHETYPES[keyof typeof ARCHETYPES] & { description: string }> {
   const prompt = `Based on these GitHub statistics and repositories:
     - Total Commits: ${stats.totalCommits}
     - Lines Added: ${stats.totalAdditions}
     - Lines Deleted: ${stats.totalDeletions}
-    - Languages Used: ${repositories.flatMap(repo => 
-        repo.languages?.map(lang => lang.name)
+    - Languages Used: ${repositories.flatMap((repo: any) => 
+        repo.languages?.map((lang: any) => lang.name)
       ).filter(Boolean).join(', ')}
     - Most Starred Repo: ${repositories[0]?.stars || 0} stars
-    ${repositories.map(repo => `
+    ${repositories.map((repo: any) => `
     Repository: ${repo.name}
     Description: ${repo.description}
     Primary Language: ${repo.primaryLanguage}
@@ -258,27 +209,13 @@ const ProjectIdeaSchema = z.object({
   mainFeatures: z.array(z.string()).min(2).max(4)
 });
 
-export async function generateNextProject(
-  stats: {
-    totalCommits: number;
-    totalAdditions: number;
-    totalDeletions: number;
-  },
-  repositories: Array<{
-    name: string;
-    description: string;
-    commits: number;
-    stars: number;
-    primaryLanguage: string | null;
-    languages: Array<{ name: string; color: string }>;
-  }>
-): Promise<z.infer<typeof ProjectIdeaSchema>> {
+export async function generateNextProject(stats: any, repositories: any): Promise<z.infer<typeof ProjectIdeaSchema>> {
   const prompt = `Based on these GitHub statistics and tech stack:
-    - Languages: ${repositories.flatMap(repo => 
-        repo.languages?.map(lang => lang.name)
+    - Languages: ${repositories.flatMap((repo: any) => 
+        repo.languages?.map((lang: any) => lang.name)
       ).filter(Boolean).join(', ')}
     - Most Used Language: ${repositories[0]?.primaryLanguage}
-    - Current Projects: ${repositories.map(repo => 
+    - Current Projects: ${repositories.map((repo: any) => 
       `${repo.name} (${repo.description})`
     ).join(', ')}
 
@@ -345,39 +282,19 @@ const WeaknessSchema = z.object({
   quickTip: z.string()
 });
 
-export async function generateAchillesHeel(
-  stats: {
-    totalCommits: number;
-    totalAdditions: number;
-    totalDeletions: number;
-  },
-  repositories: Array<{
-    name: string;
-    description: string;
-    commits: number;
-    stars: number;
-    primaryLanguage: string | null;
-    languages: Array<{ name: string; color: string }>;
-    recentCommits: Array<{
-      message: string;
-      date: string;
-      additions: number;
-      deletions: number;
-    }>;
-  }>
-): Promise<typeof WEAKNESSES[keyof typeof WEAKNESSES] & { description: string, quickTip: string }> {
+export async function generateAchillesHeel(stats: any, repositories: any): Promise<typeof WEAKNESSES[keyof typeof WEAKNESSES] & { description: string, quickTip: string }> {
   const prompt = `Based on these GitHub statistics and repositories:
     - Total Commits: ${stats.totalCommits}
     - Lines Added: ${stats.totalAdditions}
     - Lines Deleted: ${stats.totalDeletions}
-    - Languages Used: ${repositories.flatMap(repo => 
-        repo.languages?.map(lang => lang.name)
+    - Languages Used: ${repositories.flatMap((repo: any) => 
+        repo.languages?.map((lang: any) => lang.name)
       ).filter(Boolean).join(', ')}
-    ${repositories.map(repo => `
+    ${repositories.map((repo: any) => `
     Repository: ${repo.name}
     Description: ${repo.description}
     Primary Language: ${repo.primaryLanguage}
-    Recent commits: ${repo.recentCommits?.map(commit => 
+    Recent commits: ${repo.recentCommits?.map((commit: any) => 
       `- ${commit.message}`
     ).join('\n')}
     `).join('\n')}

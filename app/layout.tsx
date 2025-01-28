@@ -14,7 +14,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Github Stats Widget",
+  title: "Github Profile Widget",
   description: "Created by Greptile",
 };
 

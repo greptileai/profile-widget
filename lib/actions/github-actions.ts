@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth"
 import { GitHubStats } from "@/types/github";
 import { headers } from 'next/headers'
 
-export async function fetchGitHubStats(username: string, isAuthenticated: boolean = false): Promise<GitHubStats> {
+export async function fetchGitHubStats(username: string, isAuthenticated: boolean = false): Promise<GitHubStats | null> {
     // Verify authentication state server-side
     const session = await auth()
     const isActuallyAuthenticated = !!session?.accessToken
@@ -154,16 +154,7 @@ export async function fetchGitHubStats(username: string, isAuthenticated: boolea
       return results;
     } catch (error) {
       console.error('Error fetching GitHub stats:', error);
-      // Return default values if the API fails
-      return {
-        avatarUrl: `https://github.com/${username}.png`,
-        name: username,
-        login: username,
-        bio: '',
-        totalCommits: 0,
-        totalAdditions: 0,
-        totalDeletions: 0,
-        topRepositories: [],
-      };
+      // Return nullif the API fails
+      return null;
     }
 }

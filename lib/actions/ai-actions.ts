@@ -3,6 +3,7 @@
 import { generateText, generateObject } from "ai"
 import { openai } from "@ai-sdk/openai"
 import { z } from 'zod'
+import { getCachedData, setCachedData } from '../redis'
 
 interface Contribution {
   repo: string;
@@ -23,7 +24,22 @@ const ContributionSchema = z.object({
   impact: z.string()
 });
 
-export async function generateTags(bio: string, repositories: any): Promise<string[]> {
+async function shouldRegenerateAI(username: string, isAuthenticated: boolean): Promise<boolean> {
+  const isFresh = await getCachedData<boolean>('github:fresh', { username, isAuthenticated })
+  return !isFresh // Only regenerate if NOT fresh
+}
+
+export async function generateTags(
+  bio: string, 
+  repositories: any,
+  username: string,
+  isAuthenticated: boolean
+): Promise<string[]> {
+  if (!await shouldRegenerateAI(username, isAuthenticated)) {
+    const cached = await getCachedData<string[]>('github:ai:tags', { username, isAuthenticated })
+    if (cached) return cached
+  }
+
   const prompt = `Based on this GitHub profile:
     Bio: ${bio}
     Top Repositories:
@@ -35,16 +51,28 @@ export async function generateTags(bio: string, repositories: any): Promise<stri
 
   const { text } = await generateText({
     model: openai("gpt-4o-mini"),
-    prompt: prompt
+    prompt
   })
 
-  return text.split('\n')
+  const results = text.split('\n')
     .map(tag => tag.trim())
     .filter(tag => tag.length > 0)
     .slice(0, 3)
+
+  await setCachedData('github:ai:tags', results, { username, isAuthenticated })
+  return results
 }
 
-export async function generateTopContributions(repositories: any): Promise<Contribution[]> {
+export async function generateTopContributions(
+  repositories: any,
+  username: string,
+  isAuthenticated: boolean
+): Promise<Contribution[]> {
+  if (!await shouldRegenerateAI(username, isAuthenticated)) {
+    const cached = await getCachedData<Contribution[]>('github:ai:contributions', { username, isAuthenticated })
+    if (cached) return cached
+  }
+
   const prompt = `Analyze these GitHub repositories and their commit history:
     ${repositories.map((repo: any) => `
     Repository: ${repo.name}
@@ -69,14 +97,16 @@ export async function generateTopContributions(repositories: any): Promise<Contr
     prompt
   });
   
-  // Map the AI response to include the original repository's languages
-  return object.contributions.map((contribution: any) => {
+  const results = object.contributions.map((contribution: any) => {
     const repo = repositories.find((r: any) => r.name === contribution.repo);
     return {
       ...contribution,
       languages: repo?.languages || []
     };
   });
+
+  await setCachedData('github:ai:contributions', results, { username, isAuthenticated })
+  return results
 }
 
 const HighlightSchema = z.object({
@@ -86,7 +116,17 @@ const HighlightSchema = z.object({
   icon: z.string()
 });
 
-export async function generateHighlights(stats: any, repositories: any): Promise<Highlight[]> {
+export async function generateHighlights(
+  stats: any, 
+  repositories: any,
+  username: string,
+  isAuthenticated: boolean
+): Promise<Highlight[]> {
+  if (!await shouldRegenerateAI(username, isAuthenticated)) {
+    const cached = await getCachedData<Highlight[]>('github:ai:highlights', { username, isAuthenticated })
+    if (cached) return cached
+  }
+
   const prompt = `Based on these GitHub statistics, repositories, and commit history:
     - Total Commits: ${stats.totalCommits}
     - Lines Added: ${stats.totalAdditions}
@@ -118,7 +158,9 @@ export async function generateHighlights(stats: any, repositories: any): Promise
     prompt
   });
 
-  return object.highlights;
+  const results = object.highlights
+  await setCachedData('github:ai:highlights', results, { username, isAuthenticated })
+  return results
 }
 
 const ARCHETYPES = {
@@ -160,7 +202,17 @@ const ArchetypeSchema = z.object({
   powerMove: z.string()
 });
 
-export async function generateProgrammerArchtype(stats: any, repositories: any): Promise<typeof ARCHETYPES[keyof typeof ARCHETYPES] & { description: string, powerMove: string }> {
+export async function generateProgrammerArchtype(
+  stats: any, 
+  repositories: any,
+  username: string,
+  isAuthenticated: boolean
+): Promise<typeof ARCHETYPES[keyof typeof ARCHETYPES] & { description: string, powerMove: string }> {
+  if (!await shouldRegenerateAI(username, isAuthenticated)) {
+    const cached = await getCachedData('github:ai:archetype', { username, isAuthenticated })
+    if (cached) return cached
+  }
+
   const prompt = `Based on these GitHub statistics and repositories:
     - Total Commits: ${stats.totalCommits}
     - Lines Added: ${stats.totalAdditions}
@@ -194,11 +246,14 @@ export async function generateProgrammerArchtype(stats: any, repositories: any):
     prompt
   });
 
-  return {
+  const results = {
     ...ARCHETYPES[object.type],
     description: object.description,
     powerMove: object.powerMove
-  };
+  }
+
+  await setCachedData('github:ai:archetype', results, { username, isAuthenticated })
+  return results
 }
 
 const ProjectIdeaSchema = z.object({
@@ -209,7 +264,17 @@ const ProjectIdeaSchema = z.object({
   mainFeatures: z.array(z.string()).min(2).max(4)
 });
 
-export async function generateNextProject(stats: any, repositories: any): Promise<z.infer<typeof ProjectIdeaSchema>> {
+export async function generateNextProject(
+  stats: any, 
+  repositories: any,
+  username: string,
+  isAuthenticated: boolean
+): Promise<z.infer<typeof ProjectIdeaSchema>> {
+  if (!await shouldRegenerateAI(username, isAuthenticated)) {
+    const cached = await getCachedData<z.infer<typeof ProjectIdeaSchema>>('github:ai:project', { username, isAuthenticated })
+    if (cached) return cached
+  }
+
   const prompt = `Based on these GitHub statistics and tech stack:
     - Languages: ${repositories.flatMap((repo: any) => 
         repo.languages?.map((lang: any) => lang.name)
@@ -242,7 +307,9 @@ export async function generateNextProject(stats: any, repositories: any): Promis
     prompt
   });
 
-  return object.project;
+  const results = object.project
+  await setCachedData('github:ai:project', results, { username, isAuthenticated })
+  return results
 }
 
 // Add type export for use in components
@@ -282,7 +349,17 @@ const WeaknessSchema = z.object({
   quickTip: z.string()
 });
 
-export async function generateAchillesHeel(stats: any, repositories: any): Promise<typeof WEAKNESSES[keyof typeof WEAKNESSES] & { description: string, quickTip: string }> {
+export async function generateAchillesHeel(
+  stats: any, 
+  repositories: any,
+  username: string,
+  isAuthenticated: boolean
+): Promise<typeof WEAKNESSES[keyof typeof WEAKNESSES] & { description: string, quickTip: string }> {
+  if (!await shouldRegenerateAI(username, isAuthenticated)) {
+    const cached = await getCachedData('github:ai:weakness', { username, isAuthenticated })
+    if (cached) return cached
+  }
+
   const prompt = `Based on these GitHub statistics and repositories:
     - Total Commits: ${stats.totalCommits}
     - Lines Added: ${stats.totalAdditions}
@@ -317,11 +394,14 @@ export async function generateAchillesHeel(stats: any, repositories: any): Promi
     prompt
   });
 
-  return {
+  const results = {
     ...WEAKNESSES[object.type],
     description: object.description,
     quickTip: object.quickTip
-  };
+  }
+
+  await setCachedData('github:ai:weakness', results, { username, isAuthenticated })
+  return results
 }
 
 // Update type export for use in components

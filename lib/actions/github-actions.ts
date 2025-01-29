@@ -3,8 +3,12 @@
 import { auth } from "@/lib/auth"
 import { GitHubStats } from "@/types/github";
 import { headers } from 'next/headers'
+import { getCachedData, setCachedData } from '@/lib/redis'
 
 export async function fetchGitHubStats(username: string, isAuthenticated: boolean = false): Promise<GitHubStats | null> {
+    const cachedStats = await getCachedData<GitHubStats>('github:stats', { username, isAuthenticated })
+    if (cachedStats) return cachedStats
+
     // Verify authentication state server-side
     const session = await auth()
     const isActuallyAuthenticated = !!session?.accessToken
@@ -150,6 +154,11 @@ export async function fetchGitHubStats(username: string, isAuthenticated: boolea
           })
         ),
       };
+      
+      await Promise.all([
+        setCachedData('github:stats', results, { username, isAuthenticated }),
+        setCachedData('github:fresh', false, { username, isAuthenticated }) // Changed to false
+      ])
       
       return results;
     } catch (error) {

@@ -43,14 +43,14 @@ export default async function UserPage({ params }: Props) {
       )
     }
     
-    // Fetch all AI-generated content in parallel
+    // Updated Promise.all with auth parameters
     const [tags, topContributions, highlights, archetype, nextProject, achillesHeel] = await Promise.all([
-      generateTags(stats.bio, stats.topRepositories),
-      generateTopContributions(stats.topRepositories),
-      generateHighlights(stats, stats.topRepositories),
-      generateProgrammerArchtype(stats, stats.topRepositories),
-      generateNextProject(stats, stats.topRepositories),
-      generateAchillesHeel(stats, stats.topRepositories)
+      generateTags(stats.bio, stats.topRepositories, params.username, isAuthenticated),
+      generateTopContributions(stats.topRepositories, params.username, isAuthenticated),
+      generateHighlights(stats, stats.topRepositories, params.username, isAuthenticated),
+      generateProgrammerArchtype(stats, stats.topRepositories, params.username, isAuthenticated),
+      generateNextProject(stats, stats.topRepositories, params.username, isAuthenticated),
+      generateAchillesHeel(stats, stats.topRepositories, params.username, isAuthenticated)
     ])
 
     return <StatsPage 

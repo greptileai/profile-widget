@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['github.com', 'avatars.githubusercontent.com'],
+    domains: ['github.com', 'avatars.githubusercontent.com', 'greptile-stats.vercel.app'],
   },
 };
 

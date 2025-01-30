@@ -549,10 +549,12 @@ export default function StatsPage({
                 
                 {/* Stats Widget */}
                 <div className="space-y-5">
-                  <img 
+                  <Image 
                     src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/stats`}
                     alt="GitHub Stats Widget Preview"
-                    className="rounded-md object-contain mt-5 w-full"
+                    width={800}
+                    height={200}
+                    className="rounded-md object-contain mt-5"
                   />
                   <div className="bg-gray-800/50 p-2 rounded-md flex justify-between items-center gap-2">
                     <code className="text-xs text-emerald-400 break-all flex-grow">
@@ -573,10 +575,12 @@ export default function StatsPage({
 
                 {/* Contributions Widget */}
                 <div className="space-y-5">
-                  <img 
+                  <Image 
                     src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/contributions`}
                     alt="GitHub Contributions Widget Preview"
-                    className="rounded-md object-contain mt-5 w-full"
+                    width={800}
+                    height={260}
+                    className="rounded-md object-contain mt-5"
                   />
                   <div className="bg-gray-800/50 p-2 rounded-md flex justify-between items-center gap-2">
                     <code className="text-xs text-emerald-400 break-all flex-grow">
@@ -597,10 +601,12 @@ export default function StatsPage({
 
                 {/* Highlights Widget */}
                 <div className="space-y-5">
-                  <img 
+                  <Image 
                     src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/highlights`}
                     alt="GitHub Highlights Widget Preview"
-                    className="rounded-md object-contain mt-5 w-full"
+                    width={800}
+                    height={300}
+                    className="rounded-md object-contain mt-5"
                   />
                   <div className="bg-gray-800/50 p-2 rounded-md flex justify-between items-center gap-2">
                     <code className="text-xs text-emerald-400 break-all flex-grow">
@@ -621,10 +627,12 @@ export default function StatsPage({
 
                 {/* Archetype Widget */}
                 <div className="space-y-5">
-                  <img 
+                  <Image 
                     src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/archtype`}
                     alt="Developer Archetype Widget Preview"
-                    className="rounded-md object-contain mt-5 w-full"
+                    width={800}
+                    height={200}
+                    className="rounded-md object-contain mt-5"
                   />
                   <div className="bg-gray-800/50 p-2 rounded-md flex justify-between items-center gap-2">
                     <code className="text-xs text-emerald-400 break-all flex-grow">
@@ -645,10 +653,12 @@ export default function StatsPage({
 
                 {/* Quirk Widget */}
                 <div className="space-y-5">
-                  <img 
+                  <Image 
                     src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/quirk`}
                     alt="Development Quirk Widget Preview"
-                    className="rounded-md object-contain mt-5 w-full"
+                    width={800}
+                    height={200}
+                    className="rounded-md object-contain mt-5"
                   />
                   <div className="bg-gray-800/50 p-2 rounded-md flex justify-between items-center gap-2">
                     <code className="text-xs text-emerald-400 break-all flex-grow">
@@ -701,5 +711,4 @@ export default function StatsPage({
     </div>
   )
 }
-
 

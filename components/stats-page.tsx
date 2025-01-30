@@ -539,18 +539,20 @@ export default function StatsPage({
             <DialogHeader className="top-0 bg-gray-900 z-10 pb-4">
               <DialogTitle className="text-lg font-medium text-white">Get Your Github Widgets</DialogTitle>
             </DialogHeader>
-            <div className="text-gray-400 space-y-6 overflow-y-auto">
-              <p>Add these beautiful widgets to your Github profile README or website!</p>
+            <div className="text-gray-400 space-y-2">
+              <p className="text-sm mb-4">Add these beautiful widgets to your Github profile README or website!</p>
               
               {/* Stats Widget */}
-              <div className="space-y-2">
-                <img 
+              <div className="space-y-5">
+                <Image 
                   src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/stats`}
                   alt="GitHub Stats Widget Preview"
-                  className="w-full rounded-lg mb-4"
+                  width={800}
+                  height={200}
+                  className="rounded-md object-contain mt-5"
                 />
-                <div className="bg-gray-800/50 p-4 rounded-lg flex justify-between items-center gap-4">
-                  <code className="text-sm text-emerald-400 break-all flex-grow">
+                <div className="bg-gray-800/50 p-2 rounded-md flex justify-between items-center gap-2">
+                  <code className="text-xs text-emerald-400 break-all flex-grow">
                     {`![Github Stats](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/stats)`}
                   </code>
                   <button
@@ -558,22 +560,25 @@ export default function StatsPage({
                       navigator.clipboard.writeText(`![Github Stats](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/stats)`);
                       alert('Stats widget code copied to clipboard! ✨');
                     }}
-                    className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors group"
+                    className="p-1.5 hover:bg-gray-700/50 rounded-md transition-colors group"
                   >
-                    <Copy className="w-5 h-5 text-emerald-400 group-hover:text-emerald-300" />
+                    <Copy className="w-4 h-4 text-emerald-400 group-hover:text-emerald-300" />
                   </button>
                 </div>
+                <div className="h-px bg-gray-800/50 my-8" />
               </div>
 
               {/* Contributions Widget */}
-              <div className="space-y-2">
-                <img 
+              <div className="space-y-5">
+                <Image 
                   src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/contributions`}
                   alt="GitHub Contributions Widget Preview"
-                  className="w-full rounded-lg mb-4"
+                  width={800}
+                  height={260}
+                  className="rounded-md object-contain mt-5"
                 />
-                <div className="bg-gray-800/50 p-4 rounded-lg flex justify-between items-center gap-4">
-                  <code className="text-sm text-emerald-400 break-all flex-grow">
+                <div className="bg-gray-800/50 p-2 rounded-md flex justify-between items-center gap-2">
+                  <code className="text-xs text-emerald-400 break-all flex-grow">
                     {`![Github Contributions](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/contributions)`}
                   </code>
                   <button
@@ -581,22 +586,25 @@ export default function StatsPage({
                       navigator.clipboard.writeText(`![Github Contributions](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/contributions)`);
                       alert('Contributions widget code copied to clipboard! ✨');
                     }}
-                    className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors group"
+                    className="p-1.5 hover:bg-gray-700/50 rounded-md transition-colors group"
                   >
-                    <Copy className="w-5 h-5 text-emerald-400 group-hover:text-emerald-300" />
+                    <Copy className="w-4 h-4 text-emerald-400 group-hover:text-emerald-300" />
                   </button>
                 </div>
+                <div className="h-px bg-gray-800/50 my-8" />
               </div>
 
               {/* Highlights Widget */}
-              <div className="space-y-2">
-                <img 
+              <div className="space-y-5">
+                <Image 
                   src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/highlights`}
                   alt="GitHub Highlights Widget Preview"
-                  className="w-full rounded-lg mb-4"
+                  width={800}
+                  height={300}
+                  className="rounded-md object-contain mt-5"
                 />
-                <div className="bg-gray-800/50 p-4 rounded-lg flex justify-between items-center gap-4">
-                  <code className="text-sm text-emerald-400 break-all flex-grow">
+                <div className="bg-gray-800/50 p-2 rounded-md flex justify-between items-center gap-2">
+                  <code className="text-xs text-emerald-400 break-all flex-grow">
                     {`![Github Highlights](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/highlights)`}
                   </code>
                   <button
@@ -604,22 +612,25 @@ export default function StatsPage({
                       navigator.clipboard.writeText(`![Github Highlights](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/highlights)`);
                       alert('Highlights widget code copied to clipboard! ✨');
                     }}
-                    className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors group"
+                    className="p-1.5 hover:bg-gray-700/50 rounded-md transition-colors group"
                   >
-                    <Copy className="w-5 h-5 text-emerald-400 group-hover:text-emerald-300" />
+                    <Copy className="w-4 h-4 text-emerald-400 group-hover:text-emerald-300" />
                   </button>
                 </div>
+                <div className="h-px bg-gray-800/50 my-8" />
               </div>
 
               {/* Archetype Widget */}
-              <div className="space-y-2">
-                <img 
+              <div className="space-y-5">
+                <Image 
                   src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/archtype`}
                   alt="Developer Archetype Widget Preview"
-                  className="w-full rounded-lg mb-4"
+                  width={800}
+                  height={200}
+                  className="rounded-md object-contain mt-5"
                 />
-                <div className="bg-gray-800/50 p-4 rounded-lg flex justify-between items-center gap-4">
-                  <code className="text-sm text-emerald-400 break-all flex-grow">
+                <div className="bg-gray-800/50 p-2 rounded-md flex justify-between items-center gap-2">
+                  <code className="text-xs text-emerald-400 break-all flex-grow">
                     {`![Developer Archetype](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/archtype)`}
                   </code>
                   <button
@@ -627,22 +638,25 @@ export default function StatsPage({
                       navigator.clipboard.writeText(`![Developer Archetype](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/archtype)`);
                       alert('Archetype widget code copied to clipboard! ✨');
                     }}
-                    className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors group"
+                    className="p-1.5 hover:bg-gray-700/50 rounded-md transition-colors group"
                   >
-                    <Copy className="w-5 h-5 text-emerald-400 group-hover:text-emerald-300" />
+                    <Copy className="w-4 h-4 text-emerald-400 group-hover:text-emerald-300" />
                   </button>
                 </div>
+                <div className="h-px bg-gray-800/50 my-8" />
               </div>
 
               {/* Quirk Widget */}
-              <div className="space-y-2">
-                <img 
+              <div className="space-y-5">
+                <Image 
                   src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/quirk`}
                   alt="Development Quirk Widget Preview"
-                  className="w-full rounded-lg mb-4"
+                  width={800}
+                  height={200}
+                  className="rounded-md object-contain mt-5"
                 />
-                <div className="bg-gray-800/50 p-4 rounded-lg flex justify-between items-center gap-4">
-                  <code className="text-sm text-emerald-400 break-all flex-grow">
+                <div className="bg-gray-800/50 p-2 rounded-md flex justify-between items-center gap-2">
+                  <code className="text-xs text-emerald-400 break-all flex-grow">
                     {`![Development Quirk](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/quirk)`}
                   </code>
                   <button
@@ -650,9 +664,9 @@ export default function StatsPage({
                       navigator.clipboard.writeText(`![Development Quirk](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/quirk)`);
                       alert('Quirk widget code copied to clipboard! ✨');
                     }}
-                    className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors group"
+                    className="p-1.5 hover:bg-gray-700/50 rounded-md transition-colors group"
                   >
-                    <Copy className="w-5 h-5 text-emerald-400 group-hover:text-emerald-300" />
+                    <Copy className="w-4 h-4 text-emerald-400 group-hover:text-emerald-300" />
                   </button>
                 </div>
               </div>

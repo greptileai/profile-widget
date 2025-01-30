@@ -1,7 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['github.com', 'avatars.githubusercontent.com'],
+    domains: [
+      'localhost',
+      'greptile-stats.vercel.app',
+      'github.com', 
+      'avatars.githubusercontent.com'
+    ],
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 };
 

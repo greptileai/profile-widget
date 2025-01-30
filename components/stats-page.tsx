@@ -144,7 +144,7 @@ export default function StatsPage({
               </h1>
               <p className="text-gray-400">@{stats.login}</p>
             </div>
-            <div className="absolute -top-16 left-1/2 -translate-x-1/2 opacity-100 pl-27">
+            <div className="absolute -top-16 left-1/2 -translate-x-1/2 opacity-100 pl-27 hidden sm:block">
               <GitHubCalendar 
                 username={username} 
                 hideTotalCount={true} 
@@ -165,7 +165,7 @@ export default function StatsPage({
 
         {/* Stats Grid */}
         <motion.div 
-          className="grid grid-cols-4 gap-6 mb-6"
+          className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mb-6"
           variants={staggerChildren}
         >
           {[
@@ -207,12 +207,12 @@ export default function StatsPage({
           <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
             Top Contributions
           </h2>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             {topContributions.slice(0, 6).map((contribution: any, i: any) => (
               <motion.div
                 key={i}
                 variants={fadeInUp}
-                className="h-40"
+                className="h-auto sm:h-40"
               >
                 <Card className="bg-gray-900/30 border-gray-800/50 p-4 hover:bg-gray-900/40 transition-colors h-full flex flex-col">
                   <p className="text-gray-300 text-sm flex-grow">
@@ -245,13 +245,13 @@ export default function StatsPage({
           <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
             Highlights
           </h2>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {highlights.map((highlight: any, i: any) => (
               <Card 
                 key={i}
                 className={`${
                   highlight.type === 'achievement' ? 'bg-[#1C1917]/50' : 'bg-[#0C1B2A]/50'
-                } border-gray-800/50 p-6 flex items-center justify-between gap-8`}
+                } border-gray-800/50 p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-8`}
               >
                 <div>
                   <h3 className="text-lg text-white font-medium mb-2">
@@ -278,32 +278,25 @@ export default function StatsPage({
           <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
             Developer Archetype
           </h2>
-          <Card className="bg-gray-900/40 border-gray-800/50 p-8 overflow-hidden relative h-[200px]">
-            <div 
-              className="absolute inset-0 opacity-10"
-              style={{
-                background: `linear-gradient(135deg, ${archetype.color.from}, ${archetype.color.to})`
-              }}
-            />
-            
-            <div className="relative flex items-start gap-6 h-full">
+          <Card className="bg-gray-900/40 border-gray-800/50 p-4 sm:p-8 overflow-hidden relative min-h-[250px] sm:h-[200px]">
+            <div className="relative flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5 }}
-                className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gray-800/50 border border-gray-700/50 flex items-center justify-center"
+                className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-gray-800/50 border border-gray-700/50 flex items-center justify-center"
                 style={{
                   background: `linear-gradient(135deg, ${archetype.color.from}20, ${archetype.color.to}20)`
                 }}
               >
-                <span className="text-4xl">
+                <span className="text-3xl sm:text-4xl">
                   {archetype.icon}
                 </span>
               </motion.div>
 
               <div className="flex-grow">
                 <motion.h3 
-                  className="text-xl font-semibold"
+                  className="text-lg sm:text-xl font-semibold"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.2 }}
@@ -316,7 +309,7 @@ export default function StatsPage({
                   {archetype.title}
                 </motion.h3>
                 <motion.p 
-                  className="text-gray-400 mt-2"
+                  className="text-sm sm:text-base text-gray-400 mt-2"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3 }}
@@ -327,7 +320,7 @@ export default function StatsPage({
             </div>
 
             <motion.div 
-              className="absolute bottom-8 left-8 right-8 pt-4 border-t border-gray-800/30"
+              className="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 right-4 sm:right-8 pt-4 border-t border-gray-800/30"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4 }}
@@ -349,31 +342,25 @@ export default function StatsPage({
           <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
             Developer Quirk
           </h2>
-          <Card className="bg-gray-900/40 border-gray-800/50 p-8 overflow-hidden relative h-[200px]">
-            <div 
-              className="absolute inset-0 opacity-10"
-              style={{
-                background: `linear-gradient(135deg, ${achillesHeel.color.from}, ${achillesHeel.color.to})`
-              }}
-            />
-            
-            <div className="relative flex items-start gap-6 h-full">
+          <Card className="bg-gray-900/40 border-gray-800/50 p-4 sm:p-8 overflow-hidden relative min-h-[250px] sm:h-[200px]">
+            <div className="relative flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5 }}
-                className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gray-800/50 border border-gray-700/50 flex items-center justify-center"
+                className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-gray-800/50 border border-gray-700/50 flex items-center justify-center"
                 style={{
-                  background: `linear-gradient(135deg, ${achillesHeel.color.from}20, ${achillesHeel.color.to}20)`                }}
+                  background: `linear-gradient(135deg, ${achillesHeel.color.from}20, ${achillesHeel.color.to}20)`
+                }}
               >
-                <span className="text-4xl">
+                <span className="text-3xl sm:text-4xl">
                   {achillesHeel.icon}
                 </span>
               </motion.div>
 
               <div className="flex-grow">
                 <motion.h3 
-                  className="text-xl font-semibold"
+                  className="text-lg sm:text-xl font-semibold"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.2 }}
@@ -386,7 +373,7 @@ export default function StatsPage({
                   {achillesHeel.title}
                 </motion.h3>
                 <motion.p 
-                  className="text-gray-400 mt-2"
+                  className="text-sm sm:text-base text-gray-400 mt-2"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3 }}
@@ -397,7 +384,7 @@ export default function StatsPage({
             </div>
 
             <motion.div 
-              className="absolute bottom-8 left-8 right-8 pt-4 border-t border-gray-800/30"
+              className="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 right-4 sm:right-8 pt-4 border-t border-gray-800/30"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4 }}
@@ -503,7 +490,7 @@ export default function StatsPage({
                 Share your GitHub story with others
               </motion.p>
               <motion.div 
-                className="flex items-center justify-center gap-4"
+                className="flex flex-col sm:flex-row items-center justify-center gap-4"
                 variants={fadeInUp}
               >
                 <div className="relative">
@@ -715,7 +702,7 @@ export default function StatsPage({
           className="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm border-t border-gray-800/50"
           variants={fadeInUp}
         >
-          <div className="max-w-3xl mx-auto py-4 px-4 flex items-center justify-between">
+          <div className="max-w-3xl mx-auto py-4 px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <Link href="https://greptile.com">
               <div className="flex items-center gap-2 text-gray-400">
                 Powered by Greptile

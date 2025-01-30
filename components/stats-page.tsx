@@ -1,19 +1,23 @@
 'use client'
 
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import Image from 'next/image'
+import { motion } from 'framer-motion'
+import GitHubCalendar from 'react-github-calendar'
+import { SessionProvider } from "next-auth/react"
 import { Copy, Star, GitCommit, Plus, Minus, Search } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import SignIn from '@/components/sign-in'
-import { motion } from 'framer-motion'
-import GitHubCalendar from 'react-github-calendar'
+import PrivateStatsDialog from '@/components/private-stats-dialog'
+import { Dialog, DialogContent, DialogPortal, DialogOverlay } from '@/components/ui/dialog'
 import { GitHubStats } from '@/types/github'
 import { ScoreMetrics } from '@/lib/calculate-scores'
-import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
-import { SessionProvider } from "next-auth/react"
 import { ProjectIdea } from '@/lib/actions/ai-actions'
-import Link from 'next/link'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogPortal, DialogOverlay } from '@/components/ui/dialog'
+
+// TODO: Breakdown components into smaller components
+// TODO: Add better imports for helper functions
 
 // Animation variants
 const fadeInUp = {
@@ -570,6 +574,11 @@ export default function StatsPage({
                   </div>
                   <div className="h-px bg-gray-800/50 my-8" />
                 </div>
+
+                {/* Private Stats Widget */}
+                <SessionProvider>
+                  <PrivateStatsDialog username={username} />
+                </SessionProvider>
 
                 {/* Contributions Widget */}
                 <div className="space-y-5">

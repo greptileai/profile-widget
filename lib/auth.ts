@@ -1,5 +1,6 @@
 import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
+import { invalidateCache } from '@/lib/redis'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -21,8 +22,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return token
     },
-    async session({ session, token }) {
+    async session({ session, token, user }: any) {
       session.accessToken = token.accessToken as string
+      
+      // Invalidate cache when session is created/refreshed
+      if (user?.login) {
+        await invalidateCache({
+          username: user.login,
+          isAuthenticated: true
+        })
+      }
+      
       return session
     }
   }

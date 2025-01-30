@@ -8,8 +8,8 @@ export const redis = new Redis({
 
 // Cache durations in seconds
 const CACHE_DURATION = {
-  authenticated: 3600 * 24, // 1 day - when user is logged in with GitHub
-  public: 3600 * 24 * 7    // 1 week - for non-authenticated users
+  authenticated: null,  // Indefinitely - Until users signs in again which we will invalidate the cache
+  public: 3600 * 24     // 1 day - for non-authenticated users
 } as const
 
 interface CacheOptions {
@@ -46,14 +46,18 @@ export async function setCachedData<T>(
   const cacheKey = `${key}:${username}:${isAuthenticated ? 'auth' : 'public'}`
   const duration = isAuthenticated ? CACHE_DURATION.authenticated : CACHE_DURATION.public
   
-  await redis.set(cacheKey, data, { ex: duration })
+  if (duration === null) {
+    await redis.set(cacheKey, data)
+  } else {
+    await redis.set(cacheKey, data, { ex: duration })
+  }
 }
 
 export async function invalidateCache({ username, isAuthenticated }: CacheOptions): Promise<void> {
   const pattern = `*:${username}:${isAuthenticated ? 'auth' : 'public'}`
   const keys = await redis.keys(pattern)
   if (keys.length) {
-    await redis.del(keys[0]) // Pass single key instead of array
+    await redis.del(...keys) // Delete all keys at once
   }
 }
 

@@ -36,14 +36,11 @@ export async function generateTags(
   isAuthenticated: boolean,
   shouldRegenerate: boolean = false
 ): Promise<string[]> {
-  console.log("generateTags - shouldRegenerate:", shouldRegenerate)
   if (!shouldRegenerate) {
     const cached = await getCachedData<string[]>('ai:tags', { username, isAuthenticated })
-    console.log("generateTags - cached:", !!cached)
     if (cached) return cached
   }
   
-  console.log("generateTags - generating new data")
   const prompt = `Based on this GitHub profile:
     Bio: ${bio}
     Top Repositories:
@@ -73,14 +70,11 @@ export async function generateTopContributions(
   isAuthenticated: boolean,
   shouldRegenerate: boolean = false
 ): Promise<Contribution[]> {
-  console.log("generateTopContributions - shouldRegenerate:", shouldRegenerate)
   if (!shouldRegenerate) {
     const cached = await getCachedData<Contribution[]>('ai:contributions', { username, isAuthenticated })
-    console.log("generateTopContributions - cached:", !!cached)
     if (cached) return cached
   }
 
-  console.log("generateTopContributions - generating new data")
   const prompt = `Analyze these GitHub repositories and their commit history:
     ${repositories.map((repo: any) => `
     Repository: ${repo.name}
@@ -131,14 +125,11 @@ export async function generateHighlights(
   isAuthenticated: boolean,
   shouldRegenerate: boolean = false
 ): Promise<Highlight[]> {
-  console.log("generateHighlights - shouldRegenerate:", shouldRegenerate)
   if (!shouldRegenerate) {
     const cached = await getCachedData<Highlight[]>('ai:highlights', { username, isAuthenticated })
-    console.log("generateHighlights - cached:", !!cached)
     if (cached) return cached
   }
 
-  console.log("generateHighlights - generating new data")
   const prompt = `Based on these GitHub statistics, repositories, and commit history:
     - Total Commits: ${stats.totalCommits}
     - Lines Added: ${stats.totalAdditions}
@@ -221,14 +212,11 @@ export async function generateProgrammerArchtype(
   isAuthenticated: boolean,
   shouldRegenerate: boolean = false
 ): Promise<typeof ARCHETYPES[keyof typeof ARCHETYPES] & { description: string, powerMove: string }> {
-  console.log("generateProgrammerArchtype - shouldRegenerate:", shouldRegenerate)
   if (!shouldRegenerate) {
     const cached = await getCachedData('ai:archetype', { username, isAuthenticated })
-    console.log("generateProgrammerArchtype - cached:", !!cached)
     if (cached) return cached as any
   }
 
-  console.log("generateProgrammerArchtype - generating new data")
   const prompt = `Based on these GitHub statistics and repositories:
     - Total Commits: ${stats.totalCommits}
     - Lines Added: ${stats.totalAdditions}
@@ -287,14 +275,11 @@ export async function generateNextProject(
   isAuthenticated: boolean,
   shouldRegenerate: boolean = false
 ): Promise<z.infer<typeof ProjectIdeaSchema>> {
-  console.log("generateNextProject - shouldRegenerate:", shouldRegenerate)
   if (!shouldRegenerate) {
     const cached = await getCachedData<z.infer<typeof ProjectIdeaSchema>>('ai:project', { username, isAuthenticated })
-    console.log("generateNextProject - cached:", !!cached)
     if (cached) return cached
   }
 
-  console.log("generateNextProject - generating new data")
   const prompt = `Based on these GitHub statistics and tech stack:
     - Languages: ${repositories.flatMap((repo: any) => 
         repo.languages?.map((lang: any) => lang.name)
@@ -376,14 +361,11 @@ export async function generateAchillesHeel(
   isAuthenticated: boolean,
   shouldRegenerate: boolean = false
 ): Promise<typeof WEAKNESSES[keyof typeof WEAKNESSES] & { description: string, quickTip: string }> {
-  console.log("generateAchillesHeel - shouldRegenerate:", shouldRegenerate)
   if (!shouldRegenerate) {
     const cached = await getCachedData('ai:weakness', { username, isAuthenticated })
-    console.log("generateAchillesHeel - cached:", !!cached)
     if (cached) return cached as any
   }
-
-  console.log("generateAchillesHeel - generating new data")
+  
   const prompt = `Based on these GitHub statistics and repositories:
     - Total Commits: ${stats.totalCommits}
     - Lines Added: ${stats.totalAdditions}

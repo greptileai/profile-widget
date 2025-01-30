@@ -512,7 +512,7 @@ export default function StatsPage({
                 </div>
 
                 <motion.a
-                  href={`https://twitter.com/intent/tweet?text=Check out my Github stats!\n${encodeURIComponent(currentUrl)}`}
+                  href={`https://twitter.com/intent/tweet?text=Check out my Github stats! ${encodeURIComponent(currentUrl)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.05 }}

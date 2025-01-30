@@ -12,6 +12,10 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: '*.vercel.app',
+      },
+      {
+        protocol: 'https',
         hostname: 'github.com',
       },
       {

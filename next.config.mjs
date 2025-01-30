@@ -1,7 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['github.com', 'avatars.githubusercontent.com', 'greptile-stats.vercel.app'],
+    domains: ['github.com', 'avatars.githubusercontent.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'greptile-stats.vercel.app',
+      },
+    ],
   },
 };
 

@@ -6,6 +6,7 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'greptile-stats.vercel.app',
+        pathname: '/**/*',
       },
     ],
   },

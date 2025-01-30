@@ -104,7 +104,7 @@ export default function StatsPage({
     if (score >= 90) return 'text-emerald-500';  // 👑 Crown - best performers
     if (score >= 80) return 'text-yellow-500';   // 🏆 Trophy - excellent
     if (score >= 70) return 'text-orange-500';   // 🌟 Star - great
-    if (score >= 60) return 'text-blue-500';     // �� Sparkle - good
+    if (score >= 60) return 'text-blue-500';     // 💫 Sparkle - good
     return 'text-gray-500';                      // 🎯 Target - baseline
   };
 
@@ -535,16 +535,20 @@ export default function StatsPage({
 
         {/* Widget Dialog */}
         <Dialog open={isWidgetDialogOpen} onOpenChange={setIsWidgetDialogOpen}>
-          <DialogContent className="bg-gray-900 border-gray-800 max-w-2xl">
-            <DialogHeader>
-              <DialogTitle className="text-lg font-medium text-white">Get Your GitHub Widgets</DialogTitle>
+          <DialogContent className="bg-gray-900 border-gray-800 max-w-4xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader className="top-0 bg-gray-900 z-10 pb-4">
+              <DialogTitle className="text-lg font-medium text-white">Get Your Github Widgets</DialogTitle>
             </DialogHeader>
-            <div className="text-gray-400 space-y-6">
-              <p>Add these beautiful widgets to your GitHub profile README or website!</p>
+            <div className="text-gray-400 space-y-6 overflow-y-auto">
+              <p>Add these beautiful widgets to your Github profile README or website!</p>
               
               {/* Stats Widget */}
               <div className="space-y-2">
-                <h3 className="text-white font-medium">GitHub Stats Widget</h3>
+                <img 
+                  src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/stats`}
+                  alt="GitHub Stats Widget Preview"
+                  className="w-full rounded-lg mb-4"
+                />
                 <div className="bg-gray-800/50 p-4 rounded-lg flex justify-between items-center gap-4">
                   <code className="text-sm text-emerald-400 break-all flex-grow">
                     {`![Github Stats](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/stats)`}
@@ -563,7 +567,11 @@ export default function StatsPage({
 
               {/* Contributions Widget */}
               <div className="space-y-2">
-                <h3 className="text-white font-medium">Top Contributions Widget</h3>
+                <img 
+                  src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/contributions`}
+                  alt="GitHub Contributions Widget Preview"
+                  className="w-full rounded-lg mb-4"
+                />
                 <div className="bg-gray-800/50 p-4 rounded-lg flex justify-between items-center gap-4">
                   <code className="text-sm text-emerald-400 break-all flex-grow">
                     {`![Github Contributions](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/contributions)`}
@@ -582,7 +590,11 @@ export default function StatsPage({
 
               {/* Highlights Widget */}
               <div className="space-y-2">
-                <h3 className="text-white font-medium">Highlights Widget</h3>
+                <img 
+                  src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/highlights`}
+                  alt="GitHub Highlights Widget Preview"
+                  className="w-full rounded-lg mb-4"
+                />
                 <div className="bg-gray-800/50 p-4 rounded-lg flex justify-between items-center gap-4">
                   <code className="text-sm text-emerald-400 break-all flex-grow">
                     {`![Github Highlights](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/highlights)`}
@@ -601,7 +613,11 @@ export default function StatsPage({
 
               {/* Archetype Widget */}
               <div className="space-y-2">
-                <h3 className="text-white font-medium">Developer Archetype Widget</h3>
+                <img 
+                  src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/archtype`}
+                  alt="Developer Archetype Widget Preview"
+                  className="w-full rounded-lg mb-4"
+                />
                 <div className="bg-gray-800/50 p-4 rounded-lg flex justify-between items-center gap-4">
                   <code className="text-sm text-emerald-400 break-all flex-grow">
                     {`![Developer Archetype](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/archtype)`}
@@ -620,7 +636,11 @@ export default function StatsPage({
 
               {/* Quirk Widget */}
               <div className="space-y-2">
-                <h3 className="text-white font-medium">Development Quirk Widget</h3>
+                <img 
+                  src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/quirk`}
+                  alt="Development Quirk Widget Preview"
+                  className="w-full rounded-lg mb-4"
+                />
                 <div className="bg-gray-800/50 p-4 rounded-lg flex justify-between items-center gap-4">
                   <code className="text-sm text-emerald-400 break-all flex-grow">
                     {`![Development Quirk](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/quirk)`}

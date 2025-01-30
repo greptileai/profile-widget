@@ -571,7 +571,7 @@ export default function StatsPage({
 
                 {/* Private Stats Widget */}
                 <SessionProvider>
-                  <PrivateStatsDialog username={username} />
+                  <PrivateStatsDialog username={username} name={stats.name} />
                 </SessionProvider>
 
                 {/* Contributions Widget */}

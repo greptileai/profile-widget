@@ -225,7 +225,7 @@ export async function generateProgrammerArchtype(
   if (!shouldRegenerate) {
     const cached = await getCachedData('ai:archetype', { username, isAuthenticated })
     console.log("generateProgrammerArchtype - cached:", !!cached)
-    if (cached) return cached
+    if (cached) return cached as any
   }
 
   console.log("generateProgrammerArchtype - generating new data")
@@ -380,7 +380,7 @@ export async function generateAchillesHeel(
   if (!shouldRegenerate) {
     const cached = await getCachedData('ai:weakness', { username, isAuthenticated })
     console.log("generateAchillesHeel - cached:", !!cached)
-    if (cached) return cached
+    if (cached) return cached as any
   }
 
   console.log("generateAchillesHeel - generating new data")

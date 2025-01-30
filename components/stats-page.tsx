@@ -555,6 +555,7 @@ export default function StatsPage({
                     width={800}
                     height={200}
                     className="rounded-md object-contain mt-5"
+                    unoptimized={true}
                   />
                   <div className="bg-gray-800/50 p-2 rounded-md flex justify-between items-center gap-2">
                     <code className="text-xs text-emerald-400 break-all flex-grow">
@@ -581,6 +582,7 @@ export default function StatsPage({
                     width={800}
                     height={260}
                     className="rounded-md object-contain mt-5"
+                    unoptimized={true}
                   />
                   <div className="bg-gray-800/50 p-2 rounded-md flex justify-between items-center gap-2">
                     <code className="text-xs text-emerald-400 break-all flex-grow">
@@ -607,6 +609,7 @@ export default function StatsPage({
                     width={800}
                     height={300}
                     className="rounded-md object-contain mt-5"
+                    unoptimized={true}
                   />
                   <div className="bg-gray-800/50 p-2 rounded-md flex justify-between items-center gap-2">
                     <code className="text-xs text-emerald-400 break-all flex-grow">
@@ -633,6 +636,7 @@ export default function StatsPage({
                     width={800}
                     height={200}
                     className="rounded-md object-contain mt-5"
+                    unoptimized={true}
                   />
                   <div className="bg-gray-800/50 p-2 rounded-md flex justify-between items-center gap-2">
                     <code className="text-xs text-emerald-400 break-all flex-grow">
@@ -659,6 +663,7 @@ export default function StatsPage({
                     width={800}
                     height={200}
                     className="rounded-md object-contain mt-5"
+                    unoptimized={true}
                   />
                   <div className="bg-gray-800/50 p-2 rounded-md flex justify-between items-center gap-2">
                     <code className="text-xs text-emerald-400 break-all flex-grow">

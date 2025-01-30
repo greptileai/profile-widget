@@ -103,7 +103,7 @@ export default function HomePage() {
               <Code className="w-6 h-6 text-[#238636]" />
             </div>
             <h3 className="text-lg font-semibold mb-2">Easy Integration</h3>
-            <p className="text-gray-400">Simple copy and paste into your GitHub README</p>
+            <p className="text-gray-400">Simple copy and paste into your Github README or website</p>
           </div>
         </motion.div>
 

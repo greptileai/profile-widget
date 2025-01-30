@@ -1,3 +1,5 @@
+import { getCachedData, setCachedData } from '@/lib/redis';
+
 interface GitHubStats {
   totalCommits?: number;
   additions?: number;
@@ -5,7 +7,7 @@ interface GitHubStats {
   // Add other stats as needed
 }
 
-interface ScoreMetrics {
+export interface ScoreMetrics {
   score: number;
   commitScore: number;
   additionsScore: number;
@@ -22,6 +24,7 @@ interface ScoreMetrics {
     additions: string;
     deletions: string;
   };
+  cachedAt?: number;
 }
 
 function getIconForScore(score: number): string {
@@ -30,49 +33,6 @@ function getIconForScore(score: number): string {
   if (score >= 70) return '🌟';
   if (score >= 60) return '💫';
   return '🎯';
-}
-
-export function calculateScores(stats: GitHubStats): ScoreMetrics {
-  // Define means (previously median values)
-  const COMMIT_MEAN = 150;
-  const ADDITIONS_MEAN = 10000;
-  const DELETIONS_MEAN = 5000;
-
-  // Calculate individual scores (0-100)
-  const commitScore = calculateMetricScore(stats.totalCommits || 0, COMMIT_MEAN);
-  const additionsScore = calculateMetricScore(stats.additions || 0, ADDITIONS_MEAN);
-  const deletionsScore = calculateMetricScore(stats.deletions || 0, DELETIONS_MEAN);
-
-  // Calculate overall score (weighted average)
-  const score = Math.round(
-    (commitScore * 0.4) + 
-    (additionsScore * 0.35) + 
-    (deletionsScore * 0.25)
-  );
-
-  // Calculate top percentages (inverse of score percentile)
-  const topPercentages = {
-    overall: calculateTopPercentage(score),
-    commits: calculateTopPercentage(commitScore),
-    additions: calculateTopPercentage(additionsScore),
-    deletions: calculateTopPercentage(deletionsScore)
-  };
-
-  const icons = {
-    overall: getIconForScore(score),
-    commits: getIconForScore(commitScore),
-    additions: getIconForScore(additionsScore),
-    deletions: getIconForScore(deletionsScore)
-  };
-
-  return {
-    score,
-    commitScore,
-    additionsScore,
-    deletionsScore,
-    topPercentages,
-    icons
-  };
 }
 
 function calculateMetricScore(value: number, mean: number): number {
@@ -111,4 +71,62 @@ function calculateTopPercentage(score: number): number {
   // Make the top percentage even more favorable by applying a bigger reduction
   const topPercentage = (100 - score) * 0.7; // Reduced by 30% (previously 0.8)
   return Math.max(1, Math.round(topPercentage));
+}
+
+export async function calculateScores(
+  stats: GitHubStats,
+  options: { username: string; isAuthenticated: boolean }
+): Promise<ScoreMetrics> {
+  // Try to get cached scores first
+  const cachedScores = await getCachedData<ScoreMetrics>('scores', options);
+  if (cachedScores) {
+    return cachedScores;
+  }
+
+  // Define means (previously median values)
+  const COMMIT_MEAN = 150;
+  const ADDITIONS_MEAN = 10000;
+  const DELETIONS_MEAN = 5000;
+
+  // Calculate individual scores (0-100)
+  const commitScore = calculateMetricScore(stats.totalCommits || 0, COMMIT_MEAN);
+  const additionsScore = calculateMetricScore(stats.additions || 0, ADDITIONS_MEAN);
+  const deletionsScore = calculateMetricScore(stats.deletions || 0, DELETIONS_MEAN);
+
+  // Calculate overall score (weighted average)
+  const score = Math.round(
+    (commitScore * 0.4) + 
+    (additionsScore * 0.35) + 
+    (deletionsScore * 0.25)
+  );
+
+  // Calculate top percentages (inverse of score percentile)
+  const topPercentages = {
+    overall: calculateTopPercentage(score),
+    commits: calculateTopPercentage(commitScore),
+    additions: calculateTopPercentage(additionsScore),
+    deletions: calculateTopPercentage(deletionsScore)
+  };
+
+  const icons = {
+    overall: getIconForScore(score),
+    commits: getIconForScore(commitScore),
+    additions: getIconForScore(additionsScore),
+    deletions: getIconForScore(deletionsScore)
+  };
+
+  const results: ScoreMetrics = {
+    score,
+    commitScore,
+    additionsScore,
+    deletionsScore,
+    topPercentages,
+    icons,
+    cachedAt: Date.now()
+  };
+
+  // Cache the results
+  await setCachedData('scores', results, options);
+
+  return results;
 }

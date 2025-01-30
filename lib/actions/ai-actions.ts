@@ -33,13 +33,17 @@ export async function generateTags(
   bio: string, 
   repositories: any,
   username: string,
-  isAuthenticated: boolean
+  isAuthenticated: boolean,
+  shouldRegenerate: boolean = false
 ): Promise<string[]> {
-  if (!await shouldRegenerateAI(username, isAuthenticated)) {
-    const cached = await getCachedData<string[]>('github:ai:tags', { username, isAuthenticated })
+  console.log("generateTags - shouldRegenerate:", shouldRegenerate)
+  if (!shouldRegenerate) {
+    const cached = await getCachedData<string[]>('ai:tags', { username, isAuthenticated })
+    console.log("generateTags - cached:", !!cached)
     if (cached) return cached
   }
-
+  
+  console.log("generateTags - generating new data")
   const prompt = `Based on this GitHub profile:
     Bio: ${bio}
     Top Repositories:
@@ -59,20 +63,24 @@ export async function generateTags(
     .filter(tag => tag.length > 0)
     .slice(0, 3)
 
-  await setCachedData('github:ai:tags', results, { username, isAuthenticated })
+  await setCachedData('ai:tags', results, { username, isAuthenticated })
   return results
 }
 
 export async function generateTopContributions(
   repositories: any,
   username: string,
-  isAuthenticated: boolean
+  isAuthenticated: boolean,
+  shouldRegenerate: boolean = false
 ): Promise<Contribution[]> {
-  if (!await shouldRegenerateAI(username, isAuthenticated)) {
-    const cached = await getCachedData<Contribution[]>('github:ai:contributions', { username, isAuthenticated })
+  console.log("generateTopContributions - shouldRegenerate:", shouldRegenerate)
+  if (!shouldRegenerate) {
+    const cached = await getCachedData<Contribution[]>('ai:contributions', { username, isAuthenticated })
+    console.log("generateTopContributions - cached:", !!cached)
     if (cached) return cached
   }
 
+  console.log("generateTopContributions - generating new data")
   const prompt = `Analyze these GitHub repositories and their commit history:
     ${repositories.map((repo: any) => `
     Repository: ${repo.name}
@@ -105,7 +113,7 @@ export async function generateTopContributions(
     };
   });
 
-  await setCachedData('github:ai:contributions', results, { username, isAuthenticated })
+  await setCachedData('ai:contributions', results, { username, isAuthenticated })
   return results
 }
 
@@ -120,13 +128,17 @@ export async function generateHighlights(
   stats: any, 
   repositories: any,
   username: string,
-  isAuthenticated: boolean
+  isAuthenticated: boolean,
+  shouldRegenerate: boolean = false
 ): Promise<Highlight[]> {
-  if (!await shouldRegenerateAI(username, isAuthenticated)) {
-    const cached = await getCachedData<Highlight[]>('github:ai:highlights', { username, isAuthenticated })
+  console.log("generateHighlights - shouldRegenerate:", shouldRegenerate)
+  if (!shouldRegenerate) {
+    const cached = await getCachedData<Highlight[]>('ai:highlights', { username, isAuthenticated })
+    console.log("generateHighlights - cached:", !!cached)
     if (cached) return cached
   }
 
+  console.log("generateHighlights - generating new data")
   const prompt = `Based on these GitHub statistics, repositories, and commit history:
     - Total Commits: ${stats.totalCommits}
     - Lines Added: ${stats.totalAdditions}
@@ -148,7 +160,7 @@ export async function generateHighlights(
       `).join('\n')}
 
     Generate 2 significant highlights that showcase the developer's achievements.
-    - Focus on the most meaningful changes and make them very unique and fun. More concise and less wordy.`
+    - Focus on the high level highlight of the developer hollistically and make them very unique and fun. Do not mention explicit numbers, focus on a qualitative description. More concise and less wordy (under 200 characters).`
 
   const { object } = await generateObject({
     model: openai("gpt-4o-mini"),
@@ -159,7 +171,7 @@ export async function generateHighlights(
   });
 
   const results = object.highlights
-  await setCachedData('github:ai:highlights', results, { username, isAuthenticated })
+  await setCachedData('ai:highlights', results, { username, isAuthenticated })
   return results
 }
 
@@ -206,13 +218,17 @@ export async function generateProgrammerArchtype(
   stats: any, 
   repositories: any,
   username: string,
-  isAuthenticated: boolean
+  isAuthenticated: boolean,
+  shouldRegenerate: boolean = false
 ): Promise<typeof ARCHETYPES[keyof typeof ARCHETYPES] & { description: string, powerMove: string }> {
-  if (!await shouldRegenerateAI(username, isAuthenticated)) {
-    const cached = await getCachedData('github:ai:archetype', { username, isAuthenticated })
+  console.log("generateProgrammerArchtype - shouldRegenerate:", shouldRegenerate)
+  if (!shouldRegenerate) {
+    const cached = await getCachedData('ai:archetype', { username, isAuthenticated })
+    console.log("generateProgrammerArchtype - cached:", !!cached)
     if (cached) return cached
   }
 
+  console.log("generateProgrammerArchtype - generating new data")
   const prompt = `Based on these GitHub statistics and repositories:
     - Total Commits: ${stats.totalCommits}
     - Lines Added: ${stats.totalAdditions}
@@ -252,7 +268,7 @@ export async function generateProgrammerArchtype(
     powerMove: object.powerMove
   }
 
-  await setCachedData('github:ai:archetype', results, { username, isAuthenticated })
+  await setCachedData('ai:archetype', results, { username, isAuthenticated })
   return results
 }
 
@@ -268,13 +284,17 @@ export async function generateNextProject(
   stats: any, 
   repositories: any,
   username: string,
-  isAuthenticated: boolean
+  isAuthenticated: boolean,
+  shouldRegenerate: boolean = false
 ): Promise<z.infer<typeof ProjectIdeaSchema>> {
-  if (!await shouldRegenerateAI(username, isAuthenticated)) {
-    const cached = await getCachedData<z.infer<typeof ProjectIdeaSchema>>('github:ai:project', { username, isAuthenticated })
+  console.log("generateNextProject - shouldRegenerate:", shouldRegenerate)
+  if (!shouldRegenerate) {
+    const cached = await getCachedData<z.infer<typeof ProjectIdeaSchema>>('ai:project', { username, isAuthenticated })
+    console.log("generateNextProject - cached:", !!cached)
     if (cached) return cached
   }
 
+  console.log("generateNextProject - generating new data")
   const prompt = `Based on these GitHub statistics and tech stack:
     - Languages: ${repositories.flatMap((repo: any) => 
         repo.languages?.map((lang: any) => lang.name)
@@ -308,7 +328,7 @@ export async function generateNextProject(
   });
 
   const results = object.project
-  await setCachedData('github:ai:project', results, { username, isAuthenticated })
+  await setCachedData('ai:project', results, { username, isAuthenticated })
   return results
 }
 
@@ -353,13 +373,17 @@ export async function generateAchillesHeel(
   stats: any, 
   repositories: any,
   username: string,
-  isAuthenticated: boolean
+  isAuthenticated: boolean,
+  shouldRegenerate: boolean = false
 ): Promise<typeof WEAKNESSES[keyof typeof WEAKNESSES] & { description: string, quickTip: string }> {
-  if (!await shouldRegenerateAI(username, isAuthenticated)) {
-    const cached = await getCachedData('github:ai:weakness', { username, isAuthenticated })
+  console.log("generateAchillesHeel - shouldRegenerate:", shouldRegenerate)
+  if (!shouldRegenerate) {
+    const cached = await getCachedData('ai:weakness', { username, isAuthenticated })
+    console.log("generateAchillesHeel - cached:", !!cached)
     if (cached) return cached
   }
 
+  console.log("generateAchillesHeel - generating new data")
   const prompt = `Based on these GitHub statistics and repositories:
     - Total Commits: ${stats.totalCommits}
     - Lines Added: ${stats.totalAdditions}
@@ -400,7 +424,7 @@ export async function generateAchillesHeel(
     quickTip: object.quickTip
   }
 
-  await setCachedData('github:ai:weakness', results, { username, isAuthenticated })
+  await setCachedData('ai:weakness', results, { username, isAuthenticated })
   return results
 }
 

@@ -1,18 +1,19 @@
 'use client'
 
 import Image from 'next/image'
-import { Star, GitCommit, Plus, Minus, Search } from 'lucide-react'
+import { Copy, Star, GitCommit, Plus, Minus, Search } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import SignIn from '@/components/sign-in'
 import { motion } from 'framer-motion'
 import GitHubCalendar from 'react-github-calendar'
-import { calculateScores } from '@/lib/calculate-scores'
 import { GitHubStats } from '@/types/github'
+import { ScoreMetrics } from '@/lib/calculate-scores'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { SessionProvider } from "next-auth/react"
 import { ProjectIdea } from '@/lib/actions/ai-actions'
 import Link from 'next/link'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 // Animation variants
 const fadeInUp = {
@@ -44,6 +45,7 @@ const rainbowText = {
 export default function StatsPage({ 
   stats, 
   username,
+  scores,
   tags,
   topContributions,
   highlights,
@@ -53,6 +55,7 @@ export default function StatsPage({
 }: { 
   stats: GitHubStats, 
   username: string,
+  scores: ScoreMetrics,
   tags: string[],
   topContributions: any,
   highlights: any,
@@ -81,6 +84,7 @@ export default function StatsPage({
   const router = useRouter();
   const [searchUsername, setSearchUsername] = useState('');
   const [currentUrl, setCurrentUrl] = useState('');
+  const [isWidgetDialogOpen, setIsWidgetDialogOpen] = useState(false);
 
   useEffect(() => {
     setCurrentUrl(window.location.href);
@@ -93,11 +97,16 @@ export default function StatsPage({
     }
   };
 
-  const scores = calculateScores({
-    totalCommits: stats.totalCommits,
-    additions: stats.totalAdditions,
-    deletions: stats.totalDeletions
-  });
+  const getStatColorClass = (topPercent: number) => {
+    // Convert top percentage to a score (100 - topPercent)
+    const score = 100 - topPercent;
+    
+    if (score >= 90) return 'text-emerald-500';  // 👑 Crown - best performers
+    if (score >= 80) return 'text-yellow-500';   // 🏆 Trophy - excellent
+    if (score >= 70) return 'text-orange-500';   // 🌟 Star - great
+    if (score >= 60) return 'text-blue-500';     // �� Sparkle - good
+    return 'text-gray-500';                      // 🎯 Target - baseline
+  };
 
   return (
     <div className="bg-black w-full">
@@ -176,7 +185,7 @@ export default function StatsPage({
                   animate="animate"
                 >{stat.value}</motion.div>
                 <div className="text-sm text-gray-400 mb-1">{stat.label}</div>
-                <div className="text-xs font-medium" style={{ color: i === 3 ? '#10B981' : '#EAB308' }}>
+                <div className={`text-xs font-medium ${getStatColorClass(stat.topPercent)}`}>
                   {stat.icon} TOP {stat.topPercent}%
                 </div>
               </div>
@@ -237,7 +246,7 @@ export default function StatsPage({
                 key={i}
                 className={`${
                   highlight.type === 'achievement' ? 'bg-[#1C1917]/50' : 'bg-[#0C1B2A]/50'
-                } border-gray-800/50 p-6 flex items-center justify-between`}
+                } border-gray-800/50 p-6 flex items-center justify-between gap-8`}
               >
                 <div>
                   <h3 className="text-lg text-white font-medium mb-2">
@@ -247,7 +256,7 @@ export default function StatsPage({
                     {highlight.description}
                   </p>
                 </div>
-                <div className="text-4xl">
+                <div className="text-4xl flex-shrink-0">
                   {highlight.icon}
                 </div>
               </Card>
@@ -326,14 +335,14 @@ export default function StatsPage({
           </Card>
         </motion.div>
 
-        {/* Development Quirk */}
+        {/* Developer Quirk */}
         <motion.div 
           className="pb-8"
           variants={fadeInUp}
         >
           <div className="h-px bg-gray-800/50 mb-6" />
           <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
-            Development Quirk
+            Developer Quirk
           </h2>
           <Card className="bg-gray-900/40 border-gray-800/50 p-8 overflow-hidden relative h-[200px]">
             <div 
@@ -350,8 +359,7 @@ export default function StatsPage({
                 transition={{ duration: 0.5 }}
                 className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gray-800/50 border border-gray-700/50 flex items-center justify-center"
                 style={{
-                  background: `linear-gradient(135deg, ${achillesHeel.color.from}20, ${achillesHeel.color.to}20)`
-                }}
+                  background: `linear-gradient(135deg, ${achillesHeel.color.from}20, ${achillesHeel.color.to}20)`                }}
               >
                 <span className="text-4xl">
                   {achillesHeel.icon}
@@ -412,13 +420,11 @@ export default function StatsPage({
                 <h3 className="text-xl font-semibold text-white">
                   {nextProject.name}
                 </h3>
-                <span className="px-3 py-1 rounded-full text-xs font-medium" 
-                  style={{
-                    backgroundColor: nextProject.difficulty === 'Beginner' ? '#059669' :
-                                   nextProject.difficulty === 'Intermediate' ? '#D97706' :
-                                   '#DC2626',
-                    color: 'white'
-                  }}
+                <span className={`px-3 py-1 rounded-full text-xs font-medium text-white ${
+                  nextProject.difficulty === 'Beginner' ? 'bg-emerald-600' :
+                  nextProject.difficulty === 'Intermediate' ? 'bg-amber-600' :
+                  'bg-red-600'
+                }`}
                 >
                   {nextProject.difficulty}
                 </span>
@@ -521,23 +527,118 @@ export default function StatsPage({
                   Share on X
                   <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
                 </motion.a>
-
-                <motion.a
-                  href="/widget"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 hover:text-amber-300 text-sm transition-all duration-200 group"
-                >
-                  Get GitHub Widget
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
-                </motion.a>
               </motion.div>
             </motion.div>
           </div>
         </motion.div>
         
+
+        {/* Widget Dialog */}
+        <Dialog open={isWidgetDialogOpen} onOpenChange={setIsWidgetDialogOpen}>
+          <DialogContent className="bg-gray-900 border-gray-800 max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="text-lg font-medium text-white">Get Your GitHub Widgets</DialogTitle>
+            </DialogHeader>
+            <div className="text-gray-400 space-y-6">
+              <p>Add these beautiful widgets to your GitHub profile README or website!</p>
+              
+              {/* Stats Widget */}
+              <div className="space-y-2">
+                <h3 className="text-white font-medium">GitHub Stats Widget</h3>
+                <div className="bg-gray-800/50 p-4 rounded-lg flex justify-between items-center gap-4">
+                  <code className="text-sm text-emerald-400 break-all flex-grow">
+                    {`![Github Stats](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/stats)`}
+                  </code>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(`![Github Stats](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/stats)`);
+                      alert('Stats widget code copied to clipboard! ✨');
+                    }}
+                    className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors group"
+                  >
+                    <Copy className="w-5 h-5 text-emerald-400 group-hover:text-emerald-300" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Contributions Widget */}
+              <div className="space-y-2">
+                <h3 className="text-white font-medium">Top Contributions Widget</h3>
+                <div className="bg-gray-800/50 p-4 rounded-lg flex justify-between items-center gap-4">
+                  <code className="text-sm text-emerald-400 break-all flex-grow">
+                    {`![Github Contributions](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/contributions)`}
+                  </code>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(`![Github Contributions](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/contributions)`);
+                      alert('Contributions widget code copied to clipboard! ✨');
+                    }}
+                    className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors group"
+                  >
+                    <Copy className="w-5 h-5 text-emerald-400 group-hover:text-emerald-300" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Highlights Widget */}
+              <div className="space-y-2">
+                <h3 className="text-white font-medium">Highlights Widget</h3>
+                <div className="bg-gray-800/50 p-4 rounded-lg flex justify-between items-center gap-4">
+                  <code className="text-sm text-emerald-400 break-all flex-grow">
+                    {`![Github Highlights](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/highlights)`}
+                  </code>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(`![Github Highlights](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/highlights)`);
+                      alert('Highlights widget code copied to clipboard! ✨');
+                    }}
+                    className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors group"
+                  >
+                    <Copy className="w-5 h-5 text-emerald-400 group-hover:text-emerald-300" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Archetype Widget */}
+              <div className="space-y-2">
+                <h3 className="text-white font-medium">Developer Archetype Widget</h3>
+                <div className="bg-gray-800/50 p-4 rounded-lg flex justify-between items-center gap-4">
+                  <code className="text-sm text-emerald-400 break-all flex-grow">
+                    {`![Developer Archetype](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/archtype)`}
+                  </code>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(`![Developer Archetype](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/archtype)`);
+                      alert('Archetype widget code copied to clipboard! ✨');
+                    }}
+                    className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors group"
+                  >
+                    <Copy className="w-5 h-5 text-emerald-400 group-hover:text-emerald-300" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Quirk Widget */}
+              <div className="space-y-2">
+                <h3 className="text-white font-medium">Development Quirk Widget</h3>
+                <div className="bg-gray-800/50 p-4 rounded-lg flex justify-between items-center gap-4">
+                  <code className="text-sm text-emerald-400 break-all flex-grow">
+                    {`![Development Quirk](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/quirk)`}
+                  </code>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(`![Development Quirk](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/quirk)`);
+                      alert('Quirk widget code copied to clipboard! ✨');
+                    }}
+                    className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors group"
+                  >
+                    <Copy className="w-5 h-5 text-emerald-400 group-hover:text-emerald-300" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* Footer */}
         <motion.div 
@@ -556,6 +657,7 @@ export default function StatsPage({
                 <SignIn />
               </SessionProvider>
               <motion.button 
+                onClick={() => setIsWidgetDialogOpen(true)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 transition-colors text-white text-sm"
@@ -569,4 +671,5 @@ export default function StatsPage({
     </div>
   )
 }
+
 

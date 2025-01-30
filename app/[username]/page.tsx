@@ -1,6 +1,7 @@
 import Link from "next/link"
 import StatsPage from "@/components/stats-page"
 import { fetchGitHubStats } from "@/lib/actions/github-actions"
+import { calculateScores } from '@/lib/calculate-scores'
 import { 
   generateTags, 
   generateTopContributions, 
@@ -10,6 +11,7 @@ import {
   generateAchillesHeel
 } from "@/lib/actions/ai-actions"
 import { auth } from "@/lib/auth"
+import { batchCheckCache } from '@/lib/redis'
 
 interface Props {
   params: {
@@ -22,8 +24,13 @@ export default async function UserPage({ params }: Props) {
     const session = await auth()
     const isAuthenticated = !!session
     
-    const stats = await fetchGitHubStats(params.username, isAuthenticated)
+    const cachedData = await batchCheckCache(params.username, isAuthenticated)
+    const { shouldRegenerate } = cachedData
 
+    // Get GitHub stats (from cache or fetch)
+    const stats = cachedData['github:stats'] || 
+      await fetchGitHubStats(params.username, isAuthenticated)
+    
     if (!stats) {
       return (
         <div className="min-h-screen bg-black text-white flex items-center justify-center">
@@ -43,23 +50,35 @@ export default async function UserPage({ params }: Props) {
       )
     }
     
-    // Updated Promise.all with auth parameters
+    // Calculate scores (from cache or compute)
+    const scores = cachedData['scores'] ||
+      await calculateScores({
+        totalCommits: stats.totalCommits,
+        additions: stats.totalAdditions,
+        deletions: stats.totalDeletions
+      }, {
+        username: params.username,
+        isAuthenticated
+      })
+
+    // Generate AI content only if needed
     const [tags, topContributions, highlights, archetype, nextProject, achillesHeel] = await Promise.all([
-      generateTags(stats.bio, stats.topRepositories, params.username, isAuthenticated),
-      generateTopContributions(stats.topRepositories, params.username, isAuthenticated),
-      generateHighlights(stats, stats.topRepositories, params.username, isAuthenticated),
-      generateProgrammerArchtype(stats, stats.topRepositories, params.username, isAuthenticated),
-      generateNextProject(stats, stats.topRepositories, params.username, isAuthenticated),
-      generateAchillesHeel(stats, stats.topRepositories, params.username, isAuthenticated)
+      generateTags(stats.bio, stats.topRepositories, params.username, isAuthenticated, shouldRegenerate),
+      generateTopContributions(stats.topRepositories, params.username, isAuthenticated, shouldRegenerate),
+      generateHighlights(stats, stats.topRepositories, params.username, isAuthenticated, shouldRegenerate),
+      generateProgrammerArchtype(stats, stats.topRepositories, params.username, isAuthenticated, shouldRegenerate),
+      generateNextProject(stats, stats.topRepositories, params.username, isAuthenticated, shouldRegenerate),
+      generateAchillesHeel(stats, stats.topRepositories, params.username, isAuthenticated, shouldRegenerate)
     ])
 
     return <StatsPage 
-      username={params.username} 
-      stats={stats} 
+      username={params.username}
+      stats={stats}
+      scores={scores}
       tags={tags}
       topContributions={topContributions}
       highlights={highlights}
-      archetype={archetype as any}
+      archetype={archetype}
       nextProject={nextProject}
       achillesHeel={achillesHeel}
     />

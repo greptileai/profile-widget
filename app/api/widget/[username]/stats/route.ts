@@ -49,9 +49,6 @@ export async function GET(
         username,
         isAuthenticated: false
       })
-    
-    console.log('scores', scores)
-
     const svg = `<?xml version="1.0" encoding="UTF-8"?>
     <svg width="800" height="200" xmlns="http://www.w3.org/2000/svg">
       <style>
@@ -88,7 +85,7 @@ export async function GET(
         </g>
         <text x="25" y="15" class="label">Number Of Lines Added</text>
       </g>
-      <text x="550" y="135" class="value" text-anchor="end">${(stats.totalAdditions/1000).toFixed(1)}k</text>
+      <text x="550" y="135" class="value" text-anchor="end">${stats.totalAdditions >= 1000000 ? (stats.totalAdditions/1000000).toFixed(1) + 'M' : (stats.totalAdditions/1000).toFixed(1) + 'k'}</text>
       
       <g transform="translate(40, 150)">
         <g transform="scale(0.7)">
@@ -97,7 +94,7 @@ export async function GET(
         </g>
         <text x="25" y="15" class="label">Number Of Lines Deleted</text>
       </g>
-      <text x="550" y="165" class="value" text-anchor="end">${(stats.totalDeletions/1000).toFixed(1)}k</text>
+      <text x="550" y="165" class="value" text-anchor="end">${stats.totalDeletions >= 1000000 ? (stats.totalDeletions/1000000).toFixed(1) + 'M' : (stats.totalDeletions/1000).toFixed(1) + 'k'}</text>
 
       <!-- Vertical divider -->
       <line x1="580" y1="90" x2="580" y2="165" stroke="#333" stroke-width="2"/>

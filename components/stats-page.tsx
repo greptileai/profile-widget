@@ -538,14 +538,11 @@ export default function StatsPage({
           <DialogPortal>
             <DialogOverlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
             <DialogContent 
-              className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-gray-900 border-gray-800 max-w-4xl max-h-[80vh] overflow-y-auto rounded-lg"
+              className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-gray-900/40 border border-gray-800/50 max-w-4xl max-h-[80vh] overflow-y-auto rounded-lg"
               onOpenAutoFocus={(e) => e.preventDefault()}
             >
-              <DialogHeader className="top-0 bg-gray-900 z-10 pb-4">
-                <DialogTitle className="text-lg font-medium text-white">Get Your Github Widgets</DialogTitle>
-              </DialogHeader>
               <div className="text-gray-400 space-y-2">
-                <p className="text-sm mb-4">Add these beautiful widgets to your Github profile README or website!</p>
+                <p className="text-m mb-4">✨ Add these beautiful widgets to your Github profile README or website!</p>
                 
                 {/* Stats Widget */}
                 <div className="space-y-5">

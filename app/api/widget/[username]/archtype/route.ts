@@ -87,13 +87,16 @@ export async function GET(
         </pattern>
         </defs>
       </svg><text x="745" y="20" fill="#444" font-size="10px">Greptile</text>
-      
+
     </svg>`.trim()
 
     return new NextResponse(svg, {
       headers: {
         'Content-Type': 'image/svg+xml',
         'Cache-Control': 'max-age=0, s-maxage=3600',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers': 'Content-Type',
       },
     })
   } catch (error) {
@@ -102,6 +105,9 @@ export async function GET(
       headers: {
         'Content-Type': 'image/svg+xml',
         'Cache-Control': 'max-age=0, s-maxage=3600',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers': 'Content-Type',
       },
     })
   }

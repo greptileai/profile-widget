@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogPortal, DialogOverlay } from '@/components
 import { GitHubStats } from '@/types/github'
 import { ScoreMetrics } from '@/lib/calculate-scores'
 import { ProjectIdea } from '@/lib/actions/ai-actions'
+import { toast } from '@/hooks/use-toast'
 
 // TODO: Breakdown components into smaller components
 // TODO: Add better imports for helper functions
@@ -509,7 +510,10 @@ export default function StatsPage({
                   <motion.button 
                     onClick={() => {
                       navigator.clipboard.writeText(currentUrl);
-                      alert('Copied to clipboard! ✨');
+                      toast({
+                        title: "Profile link copied to clipboard! ✨",
+                        description: "You can now paste it into your README.md file.",
+                      });
                     }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -565,7 +569,10 @@ export default function StatsPage({
                     <button
                       onClick={() => {
                         navigator.clipboard.writeText(`![Github Stats](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/stats)`);
-                        alert('Stats widget code copied to clipboard! ✨');
+                        toast({
+                          title: "Stats widget code copied to clipboard! ✨",
+                          description: "You can now paste it into your README.md file.",
+                        });
                       }}
                       className="p-1.5 hover:bg-gray-700/50 rounded-md transition-colors group"
                     >
@@ -597,7 +604,10 @@ export default function StatsPage({
                     <button
                       onClick={() => {
                         navigator.clipboard.writeText(`![Github Contributions](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/contributions)`);
-                        alert('Contributions widget code copied to clipboard! ✨');
+                        toast({
+                          title: "Contributions widget code copied to clipboard! ✨",
+                          description: "You can now paste it into your README.md file.",
+                        });
                       }}
                       className="p-1.5 hover:bg-gray-700/50 rounded-md transition-colors group"
                     >
@@ -624,7 +634,10 @@ export default function StatsPage({
                     <button
                       onClick={() => {
                         navigator.clipboard.writeText(`![Github Highlights](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/highlights)`);
-                        alert('Highlights widget code copied to clipboard! ✨');
+                        toast({
+                          title: "Highlights widget code copied to clipboard! ✨",
+                          description: "You can now paste it into your README.md file.",
+                        });
                       }}
                       className="p-1.5 hover:bg-gray-700/50 rounded-md transition-colors group"
                     >
@@ -651,7 +664,10 @@ export default function StatsPage({
                     <button
                       onClick={() => {
                         navigator.clipboard.writeText(`![Developer Archetype](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/archtype)`);
-                        alert('Archetype widget code copied to clipboard! ✨');
+                        toast({
+                          title: "Archetype widget code copied to clipboard! ✨",
+                          description: "You can now paste it into your README.md file.",
+                        });
                       }}
                       className="p-1.5 hover:bg-gray-700/50 rounded-md transition-colors group"
                     >
@@ -678,7 +694,10 @@ export default function StatsPage({
                     <button
                       onClick={() => {
                         navigator.clipboard.writeText(`![Development Quirk](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/quirk)`);
-                        alert('Quirk widget code copied to clipboard! ✨');
+                        toast({
+                          title: "Quirk widget code copied to clipboard! ✨",
+                          description: "You can now paste it into your README.md file.",
+                        });
                       }}
                       className="p-1.5 hover:bg-gray-700/50 rounded-md transition-colors group"
                     >

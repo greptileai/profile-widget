@@ -2,11 +2,12 @@
 
 import Image from "next/image"
 import { useSession } from "next-auth/react"
+import { useToast } from "@/hooks/use-toast"
 import { Copy } from "lucide-react"
 
 export default function PrivateStatsDialog({ username }: { username: string }) {
   const { status } = useSession()
-
+  const { toast } = useToast()
   if (status === "authenticated") {
     return (
       <div className="space-y-5">
@@ -27,7 +28,10 @@ export default function PrivateStatsDialog({ username }: { username: string }) {
               navigator.clipboard.writeText(
                 `![Github Stats](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/private-stats)`
               );
-              alert('Stats widget code copied to clipboard! ✨');
+              toast({
+                title: "Stats widget code copied to clipboard! ✨",
+                description: "You can now paste it into your README.md file.",
+              });
             }}
             className="p-1.5 hover:bg-gray-700/50 rounded-md transition-colors group"
           >

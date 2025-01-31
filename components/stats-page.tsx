@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -16,6 +16,7 @@ import { GitHubStats } from '@/types/github'
 import { ScoreMetrics } from '@/lib/calculate-scores'
 import { ProjectIdea } from '@/lib/actions/ai-actions'
 import { toast } from '@/hooks/use-toast'
+import LoadingSkeleton from '@/components/loading-skeleton'
 
 // TODO: Breakdown components into smaller components
 // TODO: Add better imports for helper functions
@@ -90,6 +91,7 @@ export default function StatsPage({
   const [searchUsername, setSearchUsername] = useState('');
   const [currentUrl, setCurrentUrl] = useState('');
   const [isWidgetDialogOpen, setIsWidgetDialogOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     setCurrentUrl(window.location.href);
@@ -98,7 +100,9 @@ export default function StatsPage({
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchUsername.trim()) {
-      router.push(`/${searchUsername.trim()}`, { scroll: true });
+      startTransition(() => {
+        router.push(`/${searchUsername.trim()}`, { scroll: true });
+      });
     }
   };
 
@@ -112,6 +116,14 @@ export default function StatsPage({
     if (score >= 60) return 'text-blue-500';     // 💫 Sparkle - good
     return 'text-gray-500';                      // 🎯 Target - baseline
   };
+
+  if (isPending) {
+    return (
+      <div className="bg-black w-full">
+        <LoadingSkeleton />
+      </div>
+    );
+  }
 
   return (
     <div className="bg-black w-full">
@@ -278,7 +290,7 @@ export default function StatsPage({
           <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
             Developer Archetype
           </h2>
-          <Card className="bg-gray-900/40 border-gray-800/50 p-4 sm:p-8 overflow-hidden relative min-h-[250px] sm:h-[200px]">
+          <Card className="bg-gray-900/40 border-gray-800/50 p-4 sm:p-8 overflow-hidden relative min-h-[200px] sm:h-[160px]">
             <div className="relative flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
@@ -342,7 +354,7 @@ export default function StatsPage({
           <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
             Developer Quirk
           </h2>
-          <Card className="bg-gray-900/40 border-gray-800/50 p-4 sm:p-8 overflow-hidden relative min-h-[250px] sm:h-[200px]">
+          <Card className="bg-gray-900/40 border-gray-800/50 p-4 sm:p-8 overflow-hidden relative min-h-[200px] sm:h-[160px]">
             <div className="relative flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}

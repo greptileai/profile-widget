@@ -13,43 +13,10 @@ import {
 } from "@/lib/actions/ai-actions"
 import { auth } from "@/lib/auth"
 import { batchCheckCache } from '@/lib/redis'
-import { Metadata } from 'next'
 
 interface Props {
   params: {
     username: string
-  }
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  try {
-    const stats = await fetchGitHubStats(params.username, false)
-    
-    return {
-      title: `${params.username}'s GitHub Stats`,
-      description: stats?.bio || `Check out ${params.username}'s GitHub statistics and developer profile`,
-      openGraph: {
-        title: `${params.username}'s GitHub Stats`,
-        description: stats?.bio || `Check out ${params.username}'s GitHub statistics and developer profile`,
-        images: [{
-          url: `${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${params.username}/stats`,
-          width: 800,
-          height: 200,
-          alt: `${params.username}'s GitHub Stats`
-        }]
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: `${params.username}'s GitHub Stats`,
-        description: stats?.bio || `Check out ${params.username}'s GitHub statistics and developer profile`,
-        images: [`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${params.username}/stats`],
-      }
-    }
-  } catch (error) {
-    return {
-      title: 'GitHub Stats',
-      description: 'View GitHub statistics and developer profiles'
-    }
   }
 }
 

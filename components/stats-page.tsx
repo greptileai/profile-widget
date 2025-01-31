@@ -487,7 +487,7 @@ export default function StatsPage({
                 className="text-gray-400 mb-4"
                 variants={fadeInUp}
               >
-                Share your GitHub story with others
+                Share your Github stats with others
               </motion.p>
               <motion.div 
                 className="flex flex-col sm:flex-row items-center justify-center gap-4"

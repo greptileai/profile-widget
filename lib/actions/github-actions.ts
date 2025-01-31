@@ -11,9 +11,8 @@ export async function fetchGitHubStats(username: string, isAuthenticated: boolea
 
     // Verify authentication state server-side
     const session = await auth()
-    const isActuallyAuthenticated = !!session?.accessToken
+    const isActuallyAuthenticated = !!session?.accessToken && isAuthenticated
     
-    // Don't trust the client's isAuthenticated flag
     if (isAuthenticated && !isActuallyAuthenticated) {
         throw new Error('Unauthorized: Invalid authentication state')
     }

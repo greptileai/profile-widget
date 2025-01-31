@@ -56,7 +56,7 @@ export async function GET(
         .title { fill: white; font-size: 24px; font-weight: 500; }
         .label { fill: #888; font-size: 20px; }
         .value { fill: white; font-size: 24px; font-weight: 500; }
-        .score { fill: #FFD700; font-size: 72px; font-weight: bold; }
+        .score { fill: #10B981; font-size: 72px; font-weight: bold; }
         .rating { fill: white; font-size: 24px; }
         .icon { fill: #888; }
       </style>

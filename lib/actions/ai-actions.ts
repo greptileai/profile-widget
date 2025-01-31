@@ -88,7 +88,7 @@ export async function generateTopContributions(
 
     Generate 6 significant contributions that highlight the developer's best work. For each contribution:
     Summarize the impact in one clear sentence. When describing impact focus on the actions, improvements, and impact rather than referencing "the developer". Add a relevant emoji to the impact.
-    - For example 'Implemented auth and cured bugs that no one else could see' like be creative.
+    - For example 'Implemented auth and cured bugs that no one else could see' like be creative. Make it accurate though do not make things up. Make it less resume like and more personal.
     Focus on the most meaningful changes. Keep the impact under 130 characters.`
 
   const { object } = await generateObject({
@@ -151,7 +151,8 @@ export async function generateHighlights(
       `).join('\n')}
 
     Generate 2 significant highlights that showcase the developer's achievements.
-    - Focus on the high level highlight of the developer hollistically and make them very unique and fun. Do not mention explicit numbers, focus on a qualitative description. More concise and less wordy (under 200 characters).`
+    - Focus on the high level highlight of the developer hollistically and make them very unique and fun. Do not mention explicit numbers, focus on a qualitative description. 
+    Make it accurate though do not make things up. Make it less resume like and more personal. More concise and less wordy (under 200 characters).`
 
   const { object } = await generateObject({
     model: openai("gpt-4o-mini"),
@@ -241,8 +242,8 @@ export async function generateProgrammerArchtype(
     
     Generate:
     1. The most fitting archetype type from the list above
-    2. A witty one-line description (under 100 chars) that's specific to their tech stack and coding patterns
-    3. A power move tip (under 70 chars) that leverages their archetype's strengths`  
+    2. A witty personalone-line description (under 100 chars) that's specific to their tech stack and coding patterns. Make it accurate though do not make things up. Make it less resume like and more personal.
+    3. A personal and uniquepower move tip (under 70 chars) that leverages their archetype's strengths`  
 
   const { object } = await generateObject({
     model: openai("gpt-4o-mini"),
@@ -291,9 +292,9 @@ export async function generateNextProject(
 
     Generate a creative and achievable project idea that builds upon their skills.
     The project should be:
-    1. Realistic to complete in 2-4 weeks
+    1. Realistic to complete in 2-6 weeks
     2. Have a fun or unique angle
-    3. Solve a real developer pain point
+    3. Solve a real developer pain point or just a lot of fun
     4. Use their existing tech stack
     
     Format requirements:
@@ -391,8 +392,8 @@ export async function generateAchillesHeel(
     
     Generate:
     1. The most fitting quirk type from the list above
-    2. A witty one-line description (under 100 chars) about their quirk
-    3. A short, actionable quick-tip to improve (under 50 chars)`
+    2. A personal and witty one-line description (under 100 chars) about their quirk. Make it accurate though do not make things up. Make it less resume like and more personal.
+    3. A personal and unique short, actionable quick-tip to improve (under 50 chars)`
 
   const { object } = await generateObject({
     model: openai("gpt-4o-mini"),

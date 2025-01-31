@@ -68,16 +68,16 @@ export default async function UserPage({ params }: Props) {
       return (
         <div className="min-h-screen bg-black text-white flex items-center justify-center">
           <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">GitHub Profile Not Found</h1>
+            <h1 className="text-2xl font-bold mb-4">Unable to Load Profile</h1>
             <p className="text-gray-400 mb-6">
-              This GitHub profile doesn't exist or is not accessible
+              There was an error loading this profile. Please try again.
             </p>
-            <Link 
-              href="/"
+            <button
+              onClick={() => window.location.reload()}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm transition-all duration-200"
             >
-              Return Home
-            </Link>
+              Try Again
+            </button>
           </div>
         </div>
       )

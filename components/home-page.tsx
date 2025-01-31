@@ -4,8 +4,9 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Github, ArrowRight, Zap, PartyPopper, Code } from 'lucide-react'
+import {ArrowRight, Zap, PartyPopper, Code } from 'lucide-react'
 import LoadingSkeleton from '@/components/loading-skeleton'
+import Image from 'next/image'
 
 export default function HomePage() {
   const [username, setUsername] = useState('')
@@ -68,14 +69,22 @@ export default function HomePage() {
           className="flex items-center justify-center gap-4 w-full max-w-xl mx-auto mb-16"
         >
           <div className="relative flex-1">
-            <Github className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-[#111111] border border-gray-800 focus:outline-none focus:border-gray-600 focus:ring-1 focus:ring-gray-600 text-gray-300 placeholder:text-gray-600 transition-colors"
-              placeholder="Enter your Github username"
-            />
+            <div className="relative">
+              <Image 
+                src="/assets/github-mark-white.png"
+                alt="GitHub"
+                width={20}
+                height={20}
+                className="absolute left-4 top-1/2 -translate-y-1/2 opacity-50"
+              />
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-[#111111] border border-gray-800 focus:outline-none focus:border-gray-600 focus:ring-1 focus:ring-gray-600 text-gray-300 placeholder:text-gray-600 transition-colors"
+                placeholder="Enter your Github username"
+              />
+            </div>
           </div>
           <motion.button 
             type="submit"

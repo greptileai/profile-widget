@@ -2,10 +2,9 @@
 
 import { useSession } from "next-auth/react"
 import { githubSignIn } from "@/lib/actions/auth-actions"
-import { Github } from "lucide-react"
 import { signOut } from "next-auth/react"
 import { motion } from "framer-motion"
-
+import Image from "next/image"
 export default function SignIn({ className }: { className?: string }) {
   const { status } = useSession()
 
@@ -33,7 +32,7 @@ export default function SignIn({ className }: { className?: string }) {
           className="px-4 py-2 rounded-lg bg-gradient-to-r from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700 transition-all duration-300 text-white text-sm border border-gray-700/50 shadow-lg hover:shadow-gray-900/20 flex items-center gap-2 group"
         >
           Sign in to see full stats 
-          <Github className="w-4 h-4" />
+          <Image src="/assets/github-mark-white.png" alt="GitHub" width={16} height={16} />
         </motion.button>
       </form>
     </div>

@@ -77,9 +77,6 @@ export async function fetchGitHubStats(username: string, isAuthenticated: boolea
                 totalCount
               }
             }
-            contributionCalendar {
-              totalContributions
-            }
           }
         }
       }

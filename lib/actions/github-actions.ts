@@ -51,12 +51,6 @@ export async function fetchGitHubStats(username: string, isAuthenticated: boolea
                   name
                 }
                 pushedAt
-                issues {
-                  totalCount
-                }
-                pullRequests {
-                  totalCount
-                }
                 languages(first: 3, orderBy: {field: SIZE, direction: DESC}) {
                   nodes {
                     name
@@ -85,12 +79,6 @@ export async function fetchGitHubStats(username: string, isAuthenticated: boolea
             }
             contributionCalendar {
               totalContributions
-              weeks {
-                contributionDays {
-                  contributionCount
-                  date
-                }
-              }
             }
           }
         }

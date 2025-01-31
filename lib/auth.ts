@@ -16,23 +16,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   secret: process.env.AUTH_SECRET,
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, account, profile }) {
       if (account) {
         token.accessToken = account.access_token
+        token.login = profile?.login
       }
       return token
     },
-    async session({ session, token, user }: any) {
+    async session({ session, token }: any) {
       session.accessToken = token.accessToken as string
-      
+      session.login = token.login
       // Invalidate cache when session is created/refreshed
-      if (user?.login) {
+      if (session.login) {
         await invalidateCache({
-          username: user.login,
+          username: session.login,
           isAuthenticated: true
         })
       }
-      
       return session
     }
   }

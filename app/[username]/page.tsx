@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function UserPage({ params }: Props) {
   try {
     const session = await auth()
-    const isAuthenticated = !!session
+    const isAuthenticated = !!session && session.login === params.username
     
     const cachedData = await batchCheckCache(params.username, isAuthenticated)
     const { shouldRegenerate } = cachedData

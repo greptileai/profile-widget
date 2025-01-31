@@ -5,12 +5,12 @@ import { useSession } from "next-auth/react"
 import { useToast } from "@/hooks/use-toast"
 import { Copy } from "lucide-react"
 
-export default function PrivateStatsDialog({ username, name }: { username: string, name: string }) {
+export default function PrivateStatsDialog({ username }: { username: string }) {
   
   const { status, data: session } = useSession() as any
   const { toast } = useToast()
  
-  if (status === "authenticated" && session?.user?.name  === name) {
+  if (status === "authenticated" && session?.login  === username) {
     return (
       <div className="space-y-5">
         <Image 

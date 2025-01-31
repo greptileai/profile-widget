@@ -26,13 +26,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token }: any) {
       session.accessToken = token.accessToken as string
       session.login = token.login
-      // Invalidate cache when session is created/refreshed
-      if (session.login) {
-        await invalidateCache({
-          username: session.login,
-          isAuthenticated: true
-        })
-      }
       return session
     }
   }

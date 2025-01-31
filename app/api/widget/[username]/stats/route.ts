@@ -104,7 +104,7 @@ export async function GET(
       <text x="680" y="165" class="rating" text-anchor="middle">rating</text>
 
       <!-- Powered by Greptile -->
-      <svg x="730" y="12" width="10" height="10" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <svg x="705" y="12" width="10" height="10" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <rect width="70" height="70" fill="url(#pattern0_4119_14287)" style="mix-blend-mode:luminosity"/>
         <defs>
         <pattern id="pattern0_4119_14287" patternContentUnits="objectBoundingBox" width="1" height="1">
@@ -112,7 +112,7 @@ export async function GET(
         <use xlink:href="#image0_4119_14287" transform="scale(0.000666667)"/>
         </pattern>
         </defs>
-      </svg><text x="745" y="20" fill="#444" font-size="10px">Greptile</text>
+      </svg><text x="720" y="20" fill="#444" font-size="10px">statsforgit.com</text>
     </svg>`.trim()
 
     return new NextResponse(svg, {

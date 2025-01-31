@@ -1,22 +1,33 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { Github, ArrowRight, Zap, PartyPopper, Code } from 'lucide-react'
+import LoadingSkeleton from '@/components/loading-skeleton'
 
 export default function HomePage() {
   const [username, setUsername] = useState('')
+  const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (username) {
-      router.push(`/${username}`)
+      startTransition(() => {
+        router.push(`/${username}`)
+      })
     }
   }
 
+  if (isPending) {
+    return (
+      <div className="bg-black w-full">
+        <LoadingSkeleton />
+      </div>
+    )
+  }
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center">
       {/* Hero Section */}

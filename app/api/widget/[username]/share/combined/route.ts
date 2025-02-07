@@ -45,7 +45,7 @@ export async function GET(
     </svg>`
 
     if (format === 'png') {
-      const browser = await puppeteer.launch({ headless: 'new' });
+      const browser = await puppeteer.launch({ headless: true });
       const page = await browser.newPage();
       await page.setViewport({ width: 800, height: 400 });
       await page.setContent(`

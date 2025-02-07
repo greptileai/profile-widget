@@ -15,9 +15,19 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+{/* Make sure this works with the correct url */}
 export const metadata: Metadata = {
   title: "Github Profile Widget",
   description: "Created by Greptile",
+  openGraph: {
+    images: [
+      {
+        url: `${process.env.NEXT_PUBLIC_APP_URL}/api/og`,
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -27,13 +37,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="bg-black">
-      <Analytics />
+      <head>
+        <Analytics />
+        {/* Make sure this works with the correct url */}
+        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_APP_URL}/api/og`} />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-black`}
       >
         {children}
+        <Toaster />
       </body>
-      <Toaster />
     </html>
   );
 }

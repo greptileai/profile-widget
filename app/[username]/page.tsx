@@ -14,7 +14,6 @@ import {
 } from "@/lib/actions/ai-actions"
 import { auth } from "@/lib/auth"
 import { batchCheckCache } from '@/lib/redis'
-import HomePage from "@/components/home-page"
 
 interface Props {
   params: {

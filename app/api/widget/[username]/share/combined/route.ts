@@ -27,11 +27,11 @@ export async function GET(
 
     // Create combined SVG with both stats and contributions stacked
     const combinedSvg = `<?xml version="1.0" encoding="UTF-8"?>
-    <svg width="800" height="400" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+    <svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
       <style>
         text { font-family: system-ui, -apple-system, sans-serif; }
       </style>
-      <rect width="800" height="400" fill="#1a1b1e"/>
+      <rect width="600" height="400" fill="#1a1b1e"/>
 
       <!-- Stats Widget -->
       <g transform="translate(0, 0)">
@@ -47,14 +47,14 @@ export async function GET(
     if (format === 'png') {
       const browser = await puppeteer.launch({ headless: true });
       const page = await browser.newPage();
-      await page.setViewport({ width: 800, height: 400 });
+      await page.setViewport({ width: 600, height: 400 });
       await page.setContent(`
         <style>body { margin: 0; background: #1a1b1e; }</style>
         ${combinedSvg}
       `);
       const screenshot = await page.screenshot({ 
         type: 'png',
-        clip: { x: 0, y: 0, width: 800, height: 400 }
+        clip: { x: 0, y: 0, width: 600, height: 400 }
       });
       await browser.close();
 

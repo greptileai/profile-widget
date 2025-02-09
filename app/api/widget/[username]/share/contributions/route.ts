@@ -51,19 +51,19 @@ export async function GET(
     const topThree = contributions.slice(0, 3)
 
     const svg = `<?xml version="1.0" encoding="UTF-8"?>
-    <svg width="600" height="200" xmlns="http://www.w3.org/2000/svg">
+    <svg width="600" height="260" xmlns="http://www.w3.org/2000/svg">
       <style>
         text { font-family: system-ui, -apple-system, sans-serif; }
-        .title { fill: white; font-size: 20px; font-weight: 500; }
-        .contribution { fill: white; font-size: 12px; }
-        .repo { fill: #888; font-size: 11px; }
+        .title { fill: white; font-size: 24px; font-weight: 500; }
+        .contribution { fill: white; font-size: 14px; }
+        .repo { fill: #888; font-size: 12px; }
         .card { fill: #141517; }
       </style>
       
-      <rect width="600" height="200" fill="#1a1b1e"/>
+      <rect width="600" height="260" fill="#1a1b1e"/>
       
       <!-- Title -->
-      <text x="25" y="35" class="title">Top Contributions</text>
+      <text x="35" y="25" class="title">Top Contributions</text>
       
       <!-- Contribution Cards -->
       ${topThree.map((contribution, index) => {

@@ -7,16 +7,20 @@ import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import LoadingSkeleton from '@/components/loading-skeleton'
 
-export default function ErrorProfile() {
-  const [username, setUsername] = useState('')
+interface ErrorProfileProps {
+  username: string;
+}
+
+export default function ErrorProfile({ username }: ErrorProfileProps) {
+  const [inputUsername, setInputUsername] = useState(username)
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (username) {
+    if (inputUsername) {
       startTransition(() => {
-        router.push(`/${username}`)
+        router.push(`/${inputUsername}`)
       })
     }
   }
@@ -65,8 +69,8 @@ export default function ErrorProfile() {
             />
             <input
               type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={inputUsername}
+              onChange={(e) => setInputUsername(e.target.value)}
               className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-[#111111] border border-gray-800 focus:outline-none focus:border-gray-600 focus:ring-1 focus:ring-gray-600 text-gray-300 placeholder:text-gray-600 transition-colors"
               placeholder="Enter your Github username"
             />

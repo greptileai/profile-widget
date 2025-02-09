@@ -35,7 +35,7 @@ export default async function UserPage({ params }: Props) {
       await fetchGitHubStats(params.username, isAuthenticated)
     
     if (!stats) {
-      return <ErrorProfile />
+      return <ErrorProfile username={params.username} />
     }
     
     // Calculate scores (from cache or compute)

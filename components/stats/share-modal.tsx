@@ -20,17 +20,23 @@ export default function ShareModal({ isOpen, onOpenChange, username }: ShareModa
   }, [username]);
 
   const handleDownload = async () => {
-    const imageUrl = `${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/share/combined?format=png`;
-    const response = await fetch(imageUrl);
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${username}-github-stats.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+    try {
+      const imageUrl = `${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/share/combined?format=png`;
+      const response = await fetch(imageUrl);
+      if (!response.ok) throw new Error('Failed to download image');
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${username}-github-stats.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Failed to download image:', error);
+      // TODO: Show error message to user via toast/alert
+    }
   };
 
   return (

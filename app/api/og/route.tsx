@@ -15,6 +15,6 @@ export async function GET() {
     });
   } catch (error) {
     console.error('Error reading favicon.ico:', error);
-    return new NextResponse('Error loading favicon', { status: 500 });
+    return new NextResponse('Internal server error', { status: 500 });
   }
 }

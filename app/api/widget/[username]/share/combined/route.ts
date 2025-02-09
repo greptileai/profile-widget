@@ -16,6 +16,10 @@ export async function GET(
       fetch(`${baseUrl}/${username}/share/stats`),
       fetch(`${baseUrl}/${username}/share/contributions`)
     ])
+    
+    if (!responses.every(r => r.ok)) {
+      throw new Error(`Failed to fetch widgets: ${responses.map(r => r.status).join(', ')}`)
+    }
 
     const svgs = await Promise.all(responses.map(r => r.text()))
 

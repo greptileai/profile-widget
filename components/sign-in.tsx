@@ -12,12 +12,13 @@ export default function SignIn({ className }: { className?: string }) {
     return (
       <div className={className}>
         <motion.button 
-          onClick={() => signOut()}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={() => window.location.href = 'https://github.com/settings/connections/applications/Ov23liB2HNHJOK4SjyfH'}
           className="px-4 py-2 rounded-lg bg-gradient-to-r from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700 transition-all duration-300 text-white text-sm border border-gray-700/50 shadow-lg hover:shadow-gray-900/20 flex items-center gap-2 group"
         >
-          Sign out
+          Edit Permissions
+          <Image src="/assets/github-mark-white.png" alt="GitHub" width={16} height={16} />
         </motion.button>
       </div>
     )

@@ -12,8 +12,8 @@ export default function SearchSection() {
   const [isPending, startTransition] = useTransition()
 
   const extractUser = (user :string) =>{
-    const urlPattern = /^(https?:\/\/|www\.)/i;
-    if (urlPattern.test(user)){
+    const githubPattern = /^(https?:\/\/|www\.)github\.com\//i;
+    if (githubPattern.test(user)){
       const parts = user.split("/")
       return parts.pop() || ''}
     else {

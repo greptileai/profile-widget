@@ -14,10 +14,10 @@ export default function HomePage() {
   const router = useRouter()
 
   const extractUser = (user :string) =>{
-    const urlPattern = /^(https?:\/\/|www\.)/i;
+    const urlPattern = /^(?:https?:\/\/)?(?:www\.)?github\.com\/([\w-]+)(?:\/.*)?$/i;
     if (urlPattern.test(user)){
-      const parts = user.split("/")
-      return parts.pop() || ''}
+      const matches = user.match(urlPattern)
+      return matches?.[1] || ''}
     else {
       return user
     }
@@ -28,7 +28,11 @@ export default function HomePage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (username) {
-      const extractedUser = extractUser(username)
+      const usernamePattern = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
+      const extractedUser = extractUser(username);
+      if (!usernamePattern.test(extractedUser)) {
+        return; // Could add error handling here
+      }
 
       startTransition(() => {
         router.push(`/${extractedUser}`)

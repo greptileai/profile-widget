@@ -27,7 +27,7 @@ export default function SearchSection() {
     if (searchUsername.trim()) {
       const extractedUser = extractUser(searchUsername)
       startTransition(() => {
-        router.push(`/${extractedUser.trim()}`, { scroll: true })
+        router.push(`/${extractedUser}`, { scroll: true })
       })
     }
   }

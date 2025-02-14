@@ -11,11 +11,23 @@ export default function SearchSection() {
   const [searchUsername, setSearchUsername] = useState('')
   const [isPending, startTransition] = useTransition()
 
+  const extractUser = (user :string) =>{
+    const urlPattern = /^(https?:\/\/|www\.)/i;
+    if (urlPattern.test(user)){
+      const parts = user.split("/")
+      return parts.pop() || ''}
+    else {
+      return user
+    }
+    }
+    
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     if (searchUsername.trim()) {
+      const extractedUser = extractUser(searchUsername)
       startTransition(() => {
-        router.push(`/${searchUsername.trim()}`, { scroll: true })
+        router.push(`/${extractedUser.trim()}`, { scroll: true })
       })
     }
   }

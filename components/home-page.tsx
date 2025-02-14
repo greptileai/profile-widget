@@ -13,11 +13,25 @@ export default function HomePage() {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
+  const extractUser = (user :string) =>{
+    const urlPattern = /^(https?:\/\/|www\.)/i;
+    if (urlPattern.test(user)){
+      const parts = user.split("/")
+      return parts.pop() || ''}
+    else {
+      return user
+    }
+    }
+    
+
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (username) {
+      const extractedUser = extractUser(username)
+
       startTransition(() => {
-        router.push(`/${username}`)
+        router.push(`/${extractedUser}`)
       })
     }
   }

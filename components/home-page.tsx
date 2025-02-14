@@ -14,10 +14,10 @@ export default function HomePage() {
   const router = useRouter()
 
   const extractUser = (user :string) =>{
-    const urlPattern = /^(https?:\/\/|www\.)/i;
+    const urlPattern = /^(?:https?:\/\/)?(?:www\.)?github\.com\/([\w-]+)(?:\/.*)?$/i;
     if (urlPattern.test(user)){
-      const parts = user.split("/")
-      return parts.pop() || ''}
+      const matches = user.match(urlPattern)
+      return matches?.[1] || ''}
     else {
       return user
     }

@@ -6,6 +6,8 @@ import { SessionProvider } from "next-auth/react"
 import { Dialog, DialogContent, DialogPortal, DialogOverlay } from '@/components/ui/dialog'
 import { toast } from '@/hooks/use-toast'
 import PrivateStatsDialog from '@/components/private-stats-dialog'
+import {motion} from "framer-motion"
+import { useState } from 'react'
 
 interface WidgetDialogProps {
   username: string
@@ -14,6 +16,8 @@ interface WidgetDialogProps {
 }
 
 export default function WidgetDialog({ username, isOpen, onOpenChange }: WidgetDialogProps) {
+  const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({})
+
   const widgets = [
     {
       name: 'Stats',
@@ -63,7 +67,13 @@ export default function WidgetDialog({ username, isOpen, onOpenChange }: WidgetD
             
             {/* Regular Widgets */}
             {widgets.map((widget, index) => (
-              <div key={index} className="space-y-5">
+              <motion.div
+                key={index} 
+                className="space-y-5"
+                initial={{ opacity: 0, y: 10 }}
+                animate={loadedImages[index] ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: index * 0.1, duration: 0.2 }}
+                  >
                 <Image 
                   src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/${widget.path}`}
                   alt={`GitHub ${widget.name} Widget Preview`}
@@ -71,7 +81,11 @@ export default function WidgetDialog({ username, isOpen, onOpenChange }: WidgetD
                   height={widget.height}
                   className="rounded-md object-contain mt-5"
                   unoptimized={true}
+                  onLoadingComplete={()=>setLoadedImages(prev=>({...prev,[index]:true}))}
                 />
+                {!loadedImages[index] && (
+                  <div className="w-full h-[widget.height] bg-gray-700/50 animate-pulse rounded-md"></div>
+                )}
                 <div className="bg-gray-800/50 p-2 rounded-md flex justify-between items-center gap-2">
                   <code className="text-xs text-emerald-400 break-all flex-grow">
                     {`![Github ${widget.name}](${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/${widget.path})`}
@@ -89,7 +103,7 @@ export default function WidgetDialog({ username, isOpen, onOpenChange }: WidgetD
                 {index < widgets.length - 1 && (
                   <div className="h-px bg-gray-800/50 my-8" />
                 )}
-              </div>
+              </motion.div>
             ))}
 
             {/* Private Stats Widget */}

@@ -28,7 +28,11 @@ export default function HomePage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (username) {
-      const extractedUser = extractUser(username)
+      const usernamePattern = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
+      const extractedUser = extractUser(username);
+      if (!usernamePattern.test(extractedUser)) {
+        return; // Could add error handling here
+      }
 
       startTransition(() => {
         router.push(`/${extractedUser}`)

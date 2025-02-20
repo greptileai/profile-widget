@@ -13,11 +13,29 @@ export default function HomePage() {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
+  const extractUser = (user :string) =>{
+    const urlPattern = /^(?:https?:\/\/)?(?:www\.)?github\.com\/([\w-]+)(?:\/.*)?$/i;
+    if (urlPattern.test(user)){
+      const matches = user.match(urlPattern)
+      return matches?.[1] || ''}
+    else {
+      return user
+    }
+    }
+    
+
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (username) {
+      const usernamePattern = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
+      const extractedUser = extractUser(username);
+      if (!usernamePattern.test(extractedUser)) {
+        return; // Could add error handling here
+      }
+
       startTransition(() => {
-        router.push(`/${username}`)
+        router.push(`/${extractedUser}`)
       })
     }
   }

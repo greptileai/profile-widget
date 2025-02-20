@@ -34,7 +34,7 @@ export default function ProfileSection({ stats, username, tags }: ProfileSection
           </h1>
           <p className="text-gray-400">@{stats.login}</p>
         </div>
-        <div className="absolute -top-16 left-1/2 -translate-x-1/2 opacity-100 pl-27 hidden sm:block">
+        <div className="absolute -top-16 left-1/2 -translate-x-1/2 opacity-100 pl-27 w-full sm:w-auto text-center flex justify-center">
           <GitHubCalendar 
             username={username} 
             hideTotalCount={true} 

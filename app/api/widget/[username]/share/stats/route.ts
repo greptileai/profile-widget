@@ -49,62 +49,59 @@ export async function GET(
         username,
         isAuthenticated: false
       })
-    const svg = `<?xml version="1.0" encoding="UTF-8"?>
-    <svg width="800" height="200" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        text { font-family: system-ui, -apple-system, sans-serif; }
-        .title { fill: white; font-size: 24px; font-weight: 500; }
-        .label { fill: #888; font-size: 20px; }
-        .value { fill: white; font-size: 24px; font-weight: 500; }
-        .score { fill: #10B981; font-size: 72px; font-weight: bold; }
-        .rating { fill: white; font-size: 24px; }
-        .icon { fill: #888; }
-      </style>
-      
-      <rect width="800" height="200" fill="#1a1b1e"/>
-      
-      <!-- Title with more padding -->
-      <text x="40" y="60" class="title">${stats.name}'s Github Stats</text>
-      
-      <!-- Stats with adjusted spacing -->
-      <g transform="translate(40, 90)">
-        <g transform="scale(0.7)">
-          <circle class="icon" cx="12" cy="12" r="4" fill="none" stroke="#888" stroke-width="2"/>
-          <line x1="1.05" y1="12" x2="7" y2="12" stroke="#888" stroke-width="2"/>
-          <line x1="17.01" y1="12" x2="22.96" y2="12" stroke="#888" stroke-width="2"/>
-        </g>
-        <text x="25" y="15" class="label">Total Commits</text>
-      </g>
-      <text x="550" y="105" class="value" text-anchor="end">${stats.totalCommits.toLocaleString()}</text>
-      
-      <g transform="translate(40, 120)">
-        <g transform="scale(0.7)">
-          <circle cx="12" cy="12" r="10" fill="none" stroke="#888" stroke-width="2"/>
-          <line x1="12" y1="8" x2="12" y2="16" stroke="#888" stroke-width="2"/>
-          <line x1="8" y1="12" x2="16" y2="12" stroke="#888" stroke-width="2"/>
-        </g>
-        <text x="25" y="15" class="label">Number Of Lines Added</text>
-      </g>
-      <text x="550" y="135" class="value" text-anchor="end">${stats.totalAdditions >= 1000000 ? (stats.totalAdditions/1000000).toFixed(1) + 'M' : (stats.totalAdditions/1000).toFixed(1) + 'k'}</text>
-      
-      <g transform="translate(40, 150)">
-        <g transform="scale(0.7)">
-          <circle cx="12" cy="12" r="10" fill="none" stroke="#888" stroke-width="2"/>
-          <line x1="8" y1="12" x2="16" y2="12" stroke="#888" stroke-width="2"/>
-        </g>
-        <text x="25" y="15" class="label">Number Of Lines Deleted</text>
-      </g>
-      <text x="550" y="165" class="value" text-anchor="end">${stats.totalDeletions >= 1000000 ? (stats.totalDeletions/1000000).toFixed(1) + 'M' : (stats.totalDeletions/1000).toFixed(1) + 'k'}</text>
+const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="202" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: system-ui, -apple-system, sans-serif; }
+    .title { fill: white; font-size: 24px; font-weight: 500; }
+    .label { fill: #888; font-size: 20px; }
+    .value { fill: white; font-size: 24px; font-weight: 500; }
+    .score { fill: #10B981; font-size: 72px; font-weight: bold; }
+    .rating { fill: white; font-size: 24px; }
+    .icon { fill: #888; }
+  </style>
+  
+  <rect width="800" height="202" fill="#1a1b1e"/>
+  
+  <text x="40" y="62" class="title">${stats.name}'s Github Stats</text>
+  
+  <g transform="translate(40, 92)">
+    <g transform="scale(0.7)">
+      <circle class="icon" cx="12" cy="12" r="4" fill="none" stroke="#888" stroke-width="2"/>
+      <line x1="1.05" y1="12" x2="7" y2="12" stroke="#888" stroke-width="2"/>
+      <line x1="17.01" y1="12" x2="22.96" y2="12" stroke="#888" stroke-width="2"/>
+    </g>
+    <text x="25" y="15" class="label">Total Commits</text>
+  </g>
+  <text x="400" y="107" class="value" text-anchor="end">${stats.totalCommits.toLocaleString()}</text>
+  
+  <g transform="translate(40, 122)">
+    <g transform="scale(0.7)">
+      <circle cx="12" cy="12" r="10" fill="none" stroke="#888" stroke-width="2"/>
+      <line x1="12" y1="8" x2="12" y2="16" stroke="#888" stroke-width="2"/>
+      <line x1="8" y1="12" x2="16" y2="12" stroke="#888" stroke-width="2"/>
+    </g>
+    <text x="25" y="15" class="label">Number Of Lines Added</text>
+  </g>
+  <text x="400" y="137" class="value" text-anchor="end">${stats.totalAdditions >= 1000000 ? (stats.totalAdditions/1000000).toFixed(1) + 'M' : (stats.totalAdditions/1000).toFixed(1) + 'k'}</text>
+  <g transform="translate(40, 152)">
+    <g transform="scale(0.7)">
+      <circle cx="12" cy="12" r="10" fill="none" stroke="#888" stroke-width="2"/>
+      <line x1="8" y1="12" x2="16" y2="12" stroke="#888" stroke-width="2"/>
+    </g>
+    <text x="25" y="15" class="label">Number Of Lines Deleted</text>
+  </g>
+  <text x="400" y="167" class="value" text-anchor="end">${stats.totalDeletions >= 1000000 ? (stats.totalDeletions/1000000).toFixed(1) + 'M' : (stats.totalDeletions/1000).toFixed(1) + 'k'}</text>
 
       <!-- Vertical divider -->
-      <line x1="580" y1="90" x2="580" y2="165" stroke="#333" stroke-width="2"/>
+      <line x1="430" y1="82" x2="430" y2="177" stroke="#333" stroke-width="2"/>
       
       <!-- Score section with more space -->
-      <text x="680" y="130" class="score" text-anchor="middle">${scores.score}</text>
-      <text x="680" y="165" class="rating" text-anchor="middle">rating</text>
+      <text x="500" y="132" class="score" text-anchor="middle">${scores.score}</text>
+      <text x="500" y="167" class="rating" text-anchor="middle">rating</text>
 
       <!-- Powered by Greptile -->
-      <svg x="705" y="12" width="10" height="10" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <svg x="555" y="34" width="10" height="10" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <rect width="70" height="70" fill="url(#pattern0_4119_14287)" style="mix-blend-mode:luminosity"/>
         <defs>
         <pattern id="pattern0_4119_14287" patternContentUnits="objectBoundingBox" width="1" height="1">

@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogPortal, DialogOverlay } from '@/components/ui/dialog';
 import { generateShareUrls } from '@/lib/utils/share-urls';
-import Image from 'next/image';
 import { Download } from 'lucide-react';
+import Skeleton from '@/components/ui/skeleton';
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -14,23 +14,31 @@ interface ShareModalProps {
 
 export default function ShareModal({ isOpen, onOpenChange, username }: ShareModalProps) {
   const [shareUrls, setShareUrls] = useState({ twitter: '', linkedin: '', reddit: '' });
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     setShareUrls(generateShareUrls(username));
   }, [username]);
 
   const handleDownload = async () => {
-    const imageUrl = `${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/share/combined?format=png`;
-    const response = await fetch(imageUrl);
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${username}-github-stats.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+    try {
+      const imageUrl = `${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/share/combined?format=png`;
+      const response = await fetch(imageUrl);
+      if (!response.ok) throw new Error('Failed to download image');
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${username}-github-stats.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Failed to download image:', error);
+      // TODO: Show error message to user via toast/alert
+    }
   };
 
   return (
@@ -90,11 +98,19 @@ export default function ShareModal({ isOpen, onOpenChange, username }: ShareModa
 
           {/* Combined Preview Image */}
           <div className="space-y-2">
+            {isLoading && <Skeleton />}
             <img
               src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/share/combined`}
               alt="GitHub Stats Combined Preview"
               className="rounded-md object-contain w-full"
+              onLoad={() => setIsLoading(false)}
+              onError={() => {
+                setIsLoading(false);
+                setErrorMessage('Failed to load image.');
+              }}
+              style={{ display: isLoading ? 'none' : 'block' }}
             />
+            {errorMessage && <div className="text-red-500">{errorMessage}</div>}
           </div>
         </DialogContent>
       </DialogPortal>

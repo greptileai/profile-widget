@@ -50,6 +50,7 @@ export async function GET(
 
     if (format === 'png') {
       const browser = await puppeteer.launch({ headless: true });
+      let screenshot;
       try {
         const page = await browser.newPage();
         await page.setViewport({ width: 600, height: 400 });
@@ -57,16 +58,9 @@ export async function GET(
           <style>body { margin: 0; background: #1a1b1e; }</style>
           ${combinedSvg}
         `);
-        const screenshot = await page.screenshot({ 
+        screenshot = await page.screenshot({ 
           type: 'png',
           clip: { x: 0, y: 0, width: 600, height: 400 }
-        });
-        return new NextResponse(screenshot, {
-          headers: {
-            'Content-Type': 'image/png',
-            'Cache-Control': 'max-age=0, s-maxage=3600',
-            'Access-Control-Allow-Origin': '*',
-          },
         });
       } finally {
         await browser.close();

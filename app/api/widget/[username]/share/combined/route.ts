@@ -9,6 +9,7 @@ export async function GET(
   const { searchParams } = new URL(request.url)
   const format = searchParams.get('format')
   const baseUrl = process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL
+  console.log(`${baseUrl}/${username}/share/stats`);
 
   try {
     // Fetch all SVGs

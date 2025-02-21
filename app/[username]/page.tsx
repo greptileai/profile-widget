@@ -1,6 +1,7 @@
 import Link from "next/link"
 import StatsPage from "@/components/stats-page"
 import ErrorDisplay from '@/components/error-display'
+import ErrorProfile from '@/components/error-profile'
 import { fetchGitHubStats } from "@/lib/actions/github-actions"
 import { calculateScores } from '@/lib/calculate-scores'
 import { 
@@ -45,11 +46,7 @@ export default async function UserPage({ params }: Props) {
       await fetchWithRetry(params.username, isAuthenticated);
     
     if (!stats) {
-      return <ErrorDisplay 
-        title="Unable to Load Profile"
-        message="There was an error loading this profile. Please try again."
-        buttonText="Try Again"
-      />
+      return <ErrorProfile username={params.username} />
     }
     
     // Calculate scores (from cache or compute)

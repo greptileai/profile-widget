@@ -1,6 +1,7 @@
 import Link from "next/link"
 import StatsPage from "@/components/stats-page"
 import ErrorDisplay from '@/components/error-display'
+import ErrorProfile from '@/components/error-profile'
 import { fetchGitHubStats } from "@/lib/actions/github-actions"
 import { calculateScores } from '@/lib/calculate-scores'
 import { 
@@ -20,6 +21,20 @@ interface Props {
   }
 }
 
+const MAX_RETRIES = 3;
+
+async function fetchWithRetry(username: string, isAuthenticated: boolean, retries: number = MAX_RETRIES) {
+  try {
+    console.log(`Retrying... Attempts left: ${retries}`);
+    return await fetchGitHubStats(username, isAuthenticated);
+  } catch (error) {
+    if (retries > 0 && error instanceof Error && error.message.includes("502 Bad Gateway")) {
+      return fetchWithRetry(username, isAuthenticated, retries - 1);
+    }
+    throw error;
+  }
+}
+
 export default async function UserPage({ params }: Props) {
   try {
     const session = await auth()
@@ -27,17 +42,11 @@ export default async function UserPage({ params }: Props) {
     
     const cachedData = await batchCheckCache(params.username, isAuthenticated)
     const { shouldRegenerate } = cachedData
-
-    // Get GitHub stats (from cache or fetch)
     const stats = cachedData['github:stats'] || 
-      await fetchGitHubStats(params.username, isAuthenticated)
+      await fetchWithRetry(params.username, isAuthenticated);
     
     if (!stats) {
-      return <ErrorDisplay 
-        title="Unable to Load Profile"
-        message="There was an error loading this profile. Please try again."
-        buttonText="Try Again"
-      />
+      return <ErrorProfile username={params.username} />
     }
     
     // Calculate scores (from cache or compute)

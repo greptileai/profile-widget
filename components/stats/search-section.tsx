@@ -11,11 +11,23 @@ export default function SearchSection() {
   const [searchUsername, setSearchUsername] = useState('')
   const [isPending, startTransition] = useTransition()
 
+  const extractUser = (user :string) =>{
+    const githubPattern = /^(https?:\/\/|www\.)github\.com\//i;
+    if (githubPattern.test(user)){
+      const parts = user.split("/")
+      return parts.pop() || ''}
+    else {
+      return user
+    }
+    }
+    
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     if (searchUsername.trim()) {
+      const extractedUser = extractUser(searchUsername)
       startTransition(() => {
-        router.push(`/${searchUsername.trim()}`, { scroll: true })
+        router.push(`/${extractedUser}`, { scroll: true })
       })
     }
   }
@@ -39,7 +51,7 @@ export default function SearchSection() {
             value={searchUsername}
             onChange={(e) => setSearchUsername(e.target.value)}
             placeholder="Enter your friend's GitHub username..."
-            className="w-full px-8 py-5 rounded-2xl bg-gray-900/30 border border-gray-800/50 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-transparent text-lg"
+            className="w-full px-8 py-5 rounded-2xl bg-gray-900/30 border border-gray-800/50 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-transparent text-md sm:text-lg"
           />
           <button 
             type="submit"

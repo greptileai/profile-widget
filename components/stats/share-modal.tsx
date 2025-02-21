@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogPortal, DialogOverlay } from '@/components/ui/dialog';
 import { generateShareUrls } from '@/lib/utils/share-urls';
-import Image from 'next/image';
 import { Download } from 'lucide-react';
+import Skeleton from '@/components/ui/skeleton';
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -14,6 +14,7 @@ interface ShareModalProps {
 
 export default function ShareModal({ isOpen, onOpenChange, username }: ShareModalProps) {
   const [shareUrls, setShareUrls] = useState({ twitter: '', linkedin: '', reddit: '' });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setShareUrls(generateShareUrls(username));
@@ -96,10 +97,14 @@ export default function ShareModal({ isOpen, onOpenChange, username }: ShareModa
 
           {/* Combined Preview Image */}
           <div className="space-y-2">
+            {isLoading && <Skeleton />}
             <img
               src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/share/combined`}
               alt="GitHub Stats Combined Preview"
               className="rounded-md object-contain w-full"
+              onLoad={() => setIsLoading(false)}
+              onError={() => setIsLoading(false)}
+              style={{ display: isLoading ? 'none' : 'block' }}
             />
           </div>
         </DialogContent>

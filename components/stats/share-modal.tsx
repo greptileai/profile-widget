@@ -15,6 +15,7 @@ interface ShareModalProps {
 export default function ShareModal({ isOpen, onOpenChange, username }: ShareModalProps) {
   const [shareUrls, setShareUrls] = useState({ twitter: '', linkedin: '', reddit: '' });
   const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     setShareUrls(generateShareUrls(username));
@@ -103,9 +104,13 @@ export default function ShareModal({ isOpen, onOpenChange, username }: ShareModa
               alt="GitHub Stats Combined Preview"
               className="rounded-md object-contain w-full"
               onLoad={() => setIsLoading(false)}
-              onError={() => setIsLoading(false)}
+              onError={() => {
+                setIsLoading(false);
+                setErrorMessage('Failed to load image.');
+              }}
               style={{ display: isLoading ? 'none' : 'block' }}
             />
+            {errorMessage && <div className="text-red-500">{errorMessage}</div>}
           </div>
         </DialogContent>
       </DialogPortal>

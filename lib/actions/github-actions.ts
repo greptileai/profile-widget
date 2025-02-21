@@ -146,8 +146,7 @@ export async function fetchGitHubStats(username: string, isAuthenticated: boolea
       
       return results;
     } catch (error) {
-      console.error('Error fetching GitHub stats:', error);
-      // Return nullif the API fails
-      return null;
+      // throw an error for the retry wrapper to catch
+      throw new Error(`Error fetching GitHub stats: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
 }

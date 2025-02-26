@@ -462,10 +462,7 @@ export async function generateRoast(
     }),
     prompt
   });
-  console.log('Generated object:', object);
-
   const results = object.roast
-  console.log('Generated results:', results);
 
   await setCachedData('ai:roast', results, { username, isAuthenticated })
   return results

@@ -10,7 +10,8 @@ import {
   generateHighlights, 
   generateProgrammerArchtype,
   generateNextProject,
-  generateAchillesHeel
+  generateAchillesHeel,
+  generateRoast
 } from "@/lib/actions/ai-actions"
 import { auth } from "@/lib/auth"
 import { batchCheckCache } from '@/lib/redis'
@@ -61,13 +62,14 @@ export default async function UserPage({ params }: Props) {
       })
 
     // Generate AI content only if needed
-    const [tags, topContributions, highlights, archetype, nextProject, achillesHeel] = await Promise.all([
+    const [tags, topContributions, highlights, archetype, nextProject, achillesHeel, roast] = await Promise.all([
       generateTags(stats.bio, stats.topRepositories, params.username, isAuthenticated, shouldRegenerate),
       generateTopContributions(stats.topRepositories, params.username, isAuthenticated, shouldRegenerate),
       generateHighlights(stats, stats.topRepositories, params.username, isAuthenticated, shouldRegenerate),
       generateProgrammerArchtype(stats, stats.topRepositories, params.username, isAuthenticated, shouldRegenerate),
       generateNextProject(stats, stats.topRepositories, params.username, isAuthenticated, shouldRegenerate),
-      generateAchillesHeel(stats, stats.topRepositories, params.username, isAuthenticated, shouldRegenerate)
+      generateAchillesHeel(stats, stats.topRepositories, params.username, isAuthenticated, shouldRegenerate),
+      generateRoast(stats, stats.topRepositories, params.username, isAuthenticated, shouldRegenerate)
     ])
 
     return <StatsPage 
@@ -80,6 +82,8 @@ export default async function UserPage({ params }: Props) {
       archetype={archetype}
       nextProject={nextProject}
       achillesHeel={achillesHeel}
+      roast={roast}
+
     />
   } catch (error) {
     return <ErrorDisplay 

@@ -48,6 +48,10 @@ interface StatsPageProps {
     description: string
     quickTip: string
   }
+  roast: {
+    title: string
+    description: string
+  }
 }
 
 export default function StatsPage({ 
@@ -59,7 +63,8 @@ export default function StatsPage({
   highlights,
   archetype,
   nextProject,
-  achillesHeel
+  achillesHeel,
+  roast
 }: StatsPageProps) {
   const [isWidgetDialogOpen, setIsWidgetDialogOpen] = useState(false)
 
@@ -101,7 +106,7 @@ export default function StatsPage({
         />
 
         <AchillesHeel 
-          achillesHeel={achillesHeel}
+          achillesHeel={achillesHeel} roast={roast}
         />
 
         <NextProject 

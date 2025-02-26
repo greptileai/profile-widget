@@ -84,15 +84,15 @@ export default function AchillesHeel({ achillesHeel, roast }: AchillesHeelProps)
                     ? `linear-gradient(to right, #FF8307, #FF8308)` 
                     : `linear-gradient(to right, ${achillesHeel.color.from}, ${achillesHeel.color.to})`,
                   WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent'
+                  WebkitTextFillColor: 'transparent'
                   }}
                 >
                   {showRoast ? roast.title : achillesHeel.title}
                 </motion.h3>
 
                 <motion.p
-              className={`text-sm sm:text-base text-gray-400 mt-2 ${showRoast ? 'text-xs sm:text-sm' : ''}`}
-              initial={{ y: 20, opacity: 0 }}
+                  className={`text-sm sm:text-base text-gray-400 mt-2 ${showRoast ? 'text-xs sm:text-sm' : ''}`}
+                  initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3 }}
                 >
@@ -114,7 +114,8 @@ export default function AchillesHeel({ achillesHeel, roast }: AchillesHeelProps)
             </motion.div>
           </motion.div>
         </AnimatePresence>
-
+        
+        <div>"GET ROASTED"</div>
         <Image
           className="cursor-pointer absolute bottom-6 right-6"
           src={isOrange ? orangeFlameUrl : purpleFlameUrl}

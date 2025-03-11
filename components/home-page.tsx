@@ -32,7 +32,7 @@ export default function HomePage() {
       const usernamePattern = /^(?!-)(?!.*[^a-z\d-])(?!.*--)[a-z\d-]{1,39}(?<!-)$/i;
       const extractedUser = extractUser(username);
       if (!usernamePattern.test(extractedUser)) {
-        setError("User not found :(");
+        setError("Invalid username format. Please enter a valid GitHub username.");
         return; 
       }
 

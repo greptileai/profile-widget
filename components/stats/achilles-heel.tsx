@@ -110,7 +110,7 @@ export default function AchillesHeel({ achillesHeel, roast, stats }: AchillesHee
         <div>{showRoast ? "Get Roasted 🔥" : "Developer Quirk"}</div>
       </h2>
 
-      <Card className="bg-gray-900/40 border-gray-800/50 p-4 sm:p-8 overflow-hidden relative min-h-[200px] transition-all duration-500">
+      <Card className="bg-gray-900/40 border-gray-800/50 p-0 overflow-hidden relative min-h-[200px] transition-all duration-500">
         <AnimatePresence mode="wait">
           <motion.div
             key={showRoast ? 'roast' : 'achillesHeel'}
@@ -119,7 +119,7 @@ export default function AchillesHeel({ achillesHeel, roast, stats }: AchillesHee
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4 }}
           >
-            <CardContent className="relative flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+            <CardContent className="relative flex flex-col sm:flex-row items-start gap-4 sm:gap-6 p-4 sm:p-8">
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -134,25 +134,24 @@ export default function AchillesHeel({ achillesHeel, roast, stats }: AchillesHee
                 </span>
               </motion.div>
 
-              <div className="flex-grow">
+              <div className="flex-grow space-y-2">
                 <motion.h3
                   className="text-lg sm:text-xl font-semibold"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.2 }}
                   style={{
-                    background: showRoast 
-                    ? `linear-gradient(to right, #FF8307, #FF8308)` 
-                    : `linear-gradient(to right, ${achillesHeel.color.from}, ${achillesHeel.color.to})`,
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent'
+                    background:  
+                    `linear-gradient(to right, ${achillesHeel.color.from}, ${achillesHeel.color.to})`,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent'
                   }}
                 >
                   {showRoast ? roast.title : achillesHeel.title}
                 </motion.h3>
 
                 <motion.p
-                  className={`${showRoast ? 'text-xs sm:text-sm' : 'text-sm sm:text-base'} text-gray-400 mt-2`}
+                  className={`${showRoast ? 'text-sm' : 'text-sm sm:text-base'} text-gray-400`}
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3 }}
@@ -163,12 +162,12 @@ export default function AchillesHeel({ achillesHeel, roast, stats }: AchillesHee
             </CardContent>
 
             <motion.div
-              className="sm:mt-6 pt-2 sm:pt-4 border-t border-gray-800/30 flex justify-between items-center"
+              className="px-4 sm:px-6 py-3 border-t border-gray-800/30 flex justify-between items-center"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-              <div className="text-sm sm:text-sm max-w-[60%]">
+              <div className="text-sm max-w-[60%]">
                 <span className="text-gray-500">{showRoast ? "" : "Quick Tip: "}</span>
                 <span className="text-gray-400">
                   {showRoast ? (
@@ -186,7 +185,7 @@ export default function AchillesHeel({ achillesHeel, roast, stats }: AchillesHee
               
               <button 
                 onClick={handleClick} 
-                className="flex items-center gap-x-1 hover:opacity-80 transition-opacity duration-200 ml-4"
+                className="flex items-center gap-x-2 hover:opacity-80 transition-opacity duration-200"
               >
                 <div className="text-sm text-gray-400 font-medium">{isOrange ? "Get roasted" : "Go back"}</div>
                 <Image

@@ -108,6 +108,7 @@ export default function StatsPage({
         <AchillesHeel 
           achillesHeel={achillesHeel} 
           roast={roast}
+          stats={stats}
         />
 
         <NextProject 

@@ -5,6 +5,10 @@ import { Card, CardContent } from '@/components/ui/card'
 import { fadeInUp } from './animation-variants'
 import { useState } from 'react'
 import Image from 'next/image'
+import { GitHubStats } from '@/types/github'
+import burningElmo from '../../app/images/burning-elmo.png'
+import cryingPepe from '../../app/images/crying-pepe.png'
+
 
 interface AchillesHeelProps {
   achillesHeel: {
@@ -21,14 +25,72 @@ interface AchillesHeelProps {
     title: string
     description: string
   }
+  stats: GitHubStats
+  
+
 }
 
 const purpleFlameUrl = '/assets/purple-flame.gif'
 const orangeFlameUrl = '/assets/orange-flame.gif'
 
-export default function AchillesHeel({ achillesHeel, roast }: AchillesHeelProps) {
+
+interface RoastModalProps {
+  roast: {
+    title: string
+    description: string
+  }
+  username: string
+  avatar: string
+
+  onClose: () => void
+}
+
+const RoastModal = ({ roast, username, avatar, onClose }: RoastModalProps) => {
+  return (
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 sm:p-6">
+      <div className="relative w-full max-w-lg">
+        <div className="bg-black rounded-xl p-4 sm:p-6 border border-[#198879]">
+            <div className="flex justify-center mb-4 sm:mb-6">
+              <span className='text-xl sm:text-3xl font-extrabold text-[#198879]'>GIT ROASTED</span>
+            </div>
+            <div className="flex justify-center mb-4 sm:mb-6">
+            <Image src={cryingPepe} alt="roasted" width={40} height={40} className=" w-32"/>
+            <Image src={avatar} alt="avatar" width={40} height={40} className="rounded-full w-24"/>
+            <Image src={burningElmo} alt="roasted" width={40} height={40} className="w-32"/>
+
+            </div>
+          <h3 
+            className="text-lg sm:text-xl font-semibold px-4 text-center mb-3 sm:mb-4 text-white pb-2 border-b border-gray-400"
+          >
+            {roast.title}
+          </h3>
+          <p className="text-center text-white text-sm sm:text-base leading-relaxed mb-2 sm:mb-6">
+            {roast.description}
+          </p>
+
+          <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-gray-400">
+          <div className='text-center text-white text-xs sm:text-sm leading-relaxed '>@{username}</div>
+          <div className='flex items-center gap-2'>
+            <span className="text-center text-[#198879] text-xs sm:text-sm sm:text-base leading-relaxed">get yours @ statsforgit.com</span>
+            <Image src="/assets/greptile-logo.png" alt="Greptile Logo" width={10} height={10} />
+          </div>
+            <button 
+              onClick={onClose}
+              className="text-white text-xs sm:text-sm px-3 py-1 rounded-md hover:bg-[#198879]/10"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function AchillesHeel({ achillesHeel, roast, stats }: AchillesHeelProps) {
   const [isOrange, setIsOrange] = useState(true)
   const [showRoast, setShowRoast] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleClick = () => {
     setIsOrange(!isOrange)
@@ -69,7 +131,6 @@ export default function AchillesHeel({ achillesHeel, roast }: AchillesHeelProps)
               >
                 <span className="text-3xl sm:text-4xl">
                 {showRoast ? "😧" : achillesHeel.icon}
-
                 </span>
               </motion.div>
 
@@ -91,7 +152,7 @@ export default function AchillesHeel({ achillesHeel, roast }: AchillesHeelProps)
                 </motion.h3>
 
                 <motion.p
-                  className={`text-sm sm:text-base text-gray-400 mt-2 ${showRoast ? 'text-xs sm:text-sm' : ''}`}
+                  className={`${showRoast ? 'text-xs sm:text-sm' : 'text-sm sm:text-base'} text-gray-400 mt-2`}
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3 }}
@@ -102,28 +163,44 @@ export default function AchillesHeel({ achillesHeel, roast }: AchillesHeelProps)
             </CardContent>
 
             <motion.div
-              className="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 right-4 sm:right-8 pt-4 border-t border-gray-800/30"
+              className="sm:mt-6 pt-2 sm:pt-4 border-t border-gray-800/30 flex justify-between items-center"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-              <div className="text-sm">
-                <span className="text-gray-500">{showRoast ? " " : "Quick Tip: "}</span>
-                <span className="text-gray-400">{showRoast ? "" : achillesHeel.quickTip}</span>
+              <div className="text-sm sm:text-sm max-w-[60%]">
+                <span className="text-gray-500">{showRoast ? "" : "Quick Tip: "}</span>
+                <span className="text-gray-400">
+                  {showRoast ? (
+                    <button 
+                      onClick={() => setIsModalOpen(true)}
+                      className="text-gray-400 hover:text-gray-300 transition-colors"
+                    >
+                      Share
+                    </button>
+                  ) : (
+                    achillesHeel.quickTip
+                  )}
+                </span>
               </div>
+              
+              <button 
+                onClick={handleClick} 
+                className="flex items-center gap-x-1 hover:opacity-80 transition-opacity duration-200 ml-4"
+              >
+                <div className="text-sm text-gray-400 font-medium">{isOrange ? "Get roasted" : "Go back"}</div>
+                <Image
+                  className="cursor-pointer w-6 h-6 sm:w-7 sm:h-7"
+                  src={isOrange ? orangeFlameUrl : purpleFlameUrl}
+                  height={30}
+                  width={30}
+                  alt="flames"
+                />
+              </button>
             </motion.div>
           </motion.div>
         </AnimatePresence>
-        
-        <div>"GET ROASTED"</div>
-        <Image
-          className="cursor-pointer absolute bottom-6 right-6"
-          src={isOrange ? orangeFlameUrl : purpleFlameUrl}
-          height={30}
-          width={30}
-          onClick={handleClick}
-          alt="flames"
-        />
+        {isModalOpen && <RoastModal roast={roast} username={stats.name} avatar={stats.avatarUrl} onClose={() => setIsModalOpen(false)} />}
       </Card>
     </motion.div>
   )

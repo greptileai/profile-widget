@@ -59,7 +59,8 @@ export default function ShareCard({ stats, username, archetype, achillesHeel, sc
   return (
     <motion.div 
       id="share-card"
-      className="relative bg-black p-6 rounded-lg shadow-lg border border-gray-800 max-w-sm mx-auto"
+      key={username}
+      className="relative bg-black p-10 rounded-lg shadow-lg border border-gray-800 max-w-md mx-auto overflow-visible min-h-[480px]"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -78,6 +79,7 @@ export default function ShareCard({ stats, username, archetype, achillesHeel, sc
       <div className="relative z-10 flex flex-col items-center">
         <div className="relative w-32 h-32 mb-4 overflow-hidden rounded-full border-4 border-emerald-500">
           <Image
+            key={stats.avatarUrl}
             src={stats.avatarUrl}
             alt={`${username}'s profile picture`}
             width={128}

@@ -451,7 +451,7 @@ export async function generateRoast(
     You are an extremely sarcastic, slightly brtual, witty code reviewer who loves roasting developers, but always keep it playful. 
     
     Generate:
-    1. A title: a short title for the user that captures the essence of the roast. Think like, meme-worthy titles.
+    1. A title: a short title for the user that captures the essence of the roast. Make it 1-3 words and be funny/roasting.
     2. A roast: a detailed, personal but playful roast based on their Github data. Focus on activity level, repo-quality, commit habits, READMe usage and language choices. Keep it under 2 sentences, and ensure it's clever and humourous. Avoid offensive content.
 `
 

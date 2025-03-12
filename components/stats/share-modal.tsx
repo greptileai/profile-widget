@@ -44,13 +44,13 @@ export default function ShareModal({ isOpen, onOpenChange, username }: ShareModa
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogPortal>
-        <DialogOverlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-        <DialogContent className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-gray-900/40 border border-gray-800/50 max-w-4xl p-4 rounded-lg">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg text-white">Share Your Stats</h2>
+        <DialogOverlay className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
+        <DialogContent className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] bg-gray-900/80 backdrop-blur-xl border border-gray-800/30 max-w-4xl p-6 rounded-2xl shadow-2xl">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-semibold text-white">Share Your Stats</h2>
             <button
               onClick={handleDownload}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 text-sm transition-all duration-200"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 text-sm font-medium transition-all duration-200 hover:scale-105"
             >
               Download
               <Download className="w-4 h-4" />
@@ -58,12 +58,12 @@ export default function ShareModal({ isOpen, onOpenChange, username }: ShareModa
           </div>
           
           {/* Share Buttons */}
-          <div className="flex gap-4 mb-6">
+          <div className="flex gap-4 mb-8">
             <a 
               href={shareUrls.twitter}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#1DA1F2]/10 hover:bg-[#1DA1F2]/20 text-[#1DA1F2] text-sm transition-all duration-200"
+              className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#1DA1F2]/10 hover:bg-[#1DA1F2]/20 text-[#1DA1F2] text-sm font-medium transition-all duration-200 hover:scale-105 border border-[#1DA1F2]/20"
             >
               Share on X
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -75,7 +75,7 @@ export default function ShareModal({ isOpen, onOpenChange, username }: ShareModa
               href={shareUrls.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#0A66C2]/10 hover:bg-[#0A66C2]/20 text-[#0A66C2] text-sm transition-all duration-200"
+              className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#0A66C2]/10 hover:bg-[#0A66C2]/20 text-[#0A66C2] text-sm font-medium transition-all duration-200 hover:scale-105 border border-[#0A66C2]/20"
             >
               Share on LinkedIn
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -87,7 +87,7 @@ export default function ShareModal({ isOpen, onOpenChange, username }: ShareModa
               href={shareUrls.reddit}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#FF4500]/10 hover:bg-[#FF4500]/20 text-[#FF4500] text-sm transition-all duration-200"
+              className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#FF4500]/10 hover:bg-[#FF4500]/20 text-[#FF4500] text-sm font-medium transition-all duration-200 hover:scale-105 border border-[#FF4500]/20"
             >
               Share on Reddit
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -97,20 +97,31 @@ export default function ShareModal({ isOpen, onOpenChange, username }: ShareModa
           </div>
 
           {/* Combined Preview Image */}
-          <div className="space-y-2">
-            {isLoading && <Skeleton />}
+          <div className="space-y-4 relative rounded-xl overflow-hidden">
+            {isLoading && (
+              <div className="absolute inset-0 bg-gray-800/50 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-emerald-500 border-t-transparent"></div>
+              </div>
+            )}
             <img
               src={`${process.env.NEXT_PUBLIC_GITHUB_WIDGET_URL}/${username}/share/combined`}
               alt="GitHub Stats Combined Preview"
-              className="rounded-md object-contain w-full"
+              className="rounded-xl object-contain w-full transition-opacity duration-200"
               onLoad={() => setIsLoading(false)}
               onError={() => {
                 setIsLoading(false);
                 setErrorMessage('Failed to load image.');
               }}
-              style={{ display: isLoading ? 'none' : 'block' }}
+              style={{ opacity: isLoading ? '0' : '1' }}
             />
-            {errorMessage && <div className="text-red-500">{errorMessage}</div>}
+            {errorMessage && (
+              <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80">
+                <div className="text-red-500 text-center">
+                  <span className="block text-lg mb-2">❌</span>
+                  {errorMessage}
+                </div>
+              </div>
+            )}
           </div>
         </DialogContent>
       </DialogPortal>

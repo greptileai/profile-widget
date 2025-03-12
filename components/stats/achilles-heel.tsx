@@ -10,6 +10,8 @@ import burningElmo from '../../app/images/burning-elmo.png'
 import cryingPepe from '../../app/images/crying-pepe.png'
 import OrangeFlame from '../../app/images/gifs/orange-flame.gif'
 import PurpleFlame from '../../app/images/gifs/purple-flame.gif'
+import { FaRegShareSquare } from "react-icons/fa";
+
 
 
 interface AchillesHeelProps {
@@ -39,11 +41,14 @@ interface RoastModalProps {
   }
   username: string
   avatar: string
-
+  color: {
+    from: string
+    to: string
+  }
   onClose: () => void
 }
 
-const RoastModal = ({ roast, username, avatar, onClose }: RoastModalProps) => {
+const RoastModal = ({ roast, username, avatar, color, onClose }: RoastModalProps) => {
   return (
     <AnimatePresence>
       <motion.div
@@ -51,7 +56,7 @@ const RoastModal = ({ roast, username, avatar, onClose }: RoastModalProps) => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 sm:p-6"
+        className="fixed rounded-xl inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 sm:p-6"
       >
         <motion.div 
           initial={{ scale: 0.95, opacity: 0 }}
@@ -59,16 +64,16 @@ const RoastModal = ({ roast, username, avatar, onClose }: RoastModalProps) => {
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ type: "spring", duration: 0.5 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-lg"
+          className="relative w-full max-w-md mx-auto px-4"
         >
-          <div className="bg-black rounded-xl p-4 sm:p-6 border border-[#198879]">
+          <div className="bg-black rounded-xl p-6 sm:p-8">
             <motion.div 
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.1 }}
               className="flex justify-center mb-4 sm:mb-6"
             >
-              <span className='text-xl sm:text-3xl font-extrabold text-[#198879]'>GIT ROASTED</span>
+              <span className='text-3xl font-extrabold sm:text-3xl text-[#189480]'>GIT ROASTED</span>
             </motion.div>
             <motion.div 
               initial={{ scale: 0.9, opacity: 0 }}
@@ -84,7 +89,13 @@ const RoastModal = ({ roast, username, avatar, onClose }: RoastModalProps) => {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="text-lg sm:text-xl font-semibold px-4 text-center mb-3 sm:mb-4 text-white pb-2 border-b border-gray-400"
+              style={{
+                background:  
+                `linear-gradient(to right, ${color.from}, ${color.to})`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}
+              className="text-lg sm:text-xl font-semibold px-4 text-center mb-3 sm:mb-4 text-white "
             >
               {roast.title}
             </motion.h3>
@@ -101,21 +112,30 @@ const RoastModal = ({ roast, username, avatar, onClose }: RoastModalProps) => {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="flex items-center justify-between pt-3 sm:pt-4 border-t border-gray-400"
+              className="flex items-center justify-between pt-3 sm:pt-4"
             >
-              <div className='text-center text-white text-xs sm:text-sm leading-relaxed'>@{username}</div>
-              <div className='flex items-center gap-2'>
-                <span className="text-center text-[#198879] text-xs sm:text-sm sm:text-base leading-relaxed">get yours @ statsforgit.com</span>
-                <Image src="/assets/greptile-logo.png" alt="Greptile Logo" width={10} height={10} />
+              <div className='flex items-center justify-between w-full'>
+                <span 
+                  style={{
+                    background: `linear-gradient(to right, ${color.from}, ${color.to})`,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent'
+                  }}
+                  className='font-medium text-xs sm:text-sm leading-relaxed'
+                >@{username}</span>
+                <div className='flex items-center gap-1'>
+                  <span className="text-gray-600 text-xs sm:text-sm leading-relaxed">get yours @ statsforgit.com</span>
+                  <Image className="mt-1" src="/assets/greptile-logo.png" alt="Greptile Logo" width={10} height={10} />
+                </div>
               </div>
-              <button 
-                onClick={onClose}
-                className="text-white text-xs sm:text-sm px-3 py-1 rounded-md hover:bg-[#198879]/10"
-              >
-                Close
-              </button>
             </motion.div>
           </div>
+          <button 
+            onClick={onClose}
+            className="mt-4 w-full text-gray-400 text-xs sm:text-sm px-3 py-2 rounded-md hover:bg-[#198879]/10 transition-colors"
+          >
+            Close
+          </button>
         </motion.div>
       </motion.div>
     </AnimatePresence>
@@ -208,9 +228,9 @@ export default function AchillesHeel({ achillesHeel, roast, stats }: AchillesHee
                   {showRoast ? (
                     <button 
                       onClick={() => setIsModalOpen(true)}
-                      className="text-gray-400 hover:text-gray-300 transition-colors"
+                      className="text-gray-300 hover:text-gray-300 transition-colors p-1"
                     >
-                      Share
+                      <FaRegShareSquare className="w-5 h-5" />
                     </button>
                   ) : (
                     achillesHeel.quickTip
@@ -234,7 +254,7 @@ export default function AchillesHeel({ achillesHeel, roast, stats }: AchillesHee
             </motion.div>
           </motion.div>
         </AnimatePresence>
-        {isModalOpen && <RoastModal roast={roast} username={stats.name} avatar={stats.avatarUrl} onClose={() => setIsModalOpen(false)} />}
+        {isModalOpen && <RoastModal roast={roast} username={stats.name} avatar={stats.avatarUrl} color={achillesHeel.color} onClose={() => setIsModalOpen(false)} />}
       </Card>
     </motion.div>
   )

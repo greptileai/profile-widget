@@ -110,7 +110,12 @@ export default function StatsPage({
 
         <SearchSection />
 
-        <ShareSection />
+        <ShareSection 
+          stats={stats}
+          archetype={archetype}
+          achillesHeel={achillesHeel}
+          scores={scores}
+         />
 
         <Footer 
           setIsWidgetDialogOpen={setIsWidgetDialogOpen}

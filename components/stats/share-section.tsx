@@ -6,8 +6,48 @@ import { Share } from 'lucide-react'
 import { toast } from '@/hooks/use-toast'
 import { fadeInUp } from './animation-variants'
 import ShareModal from './share-modal'
+import { GitHubStats } from '@/types/github'
 
-export default function ShareSection() {
+interface ShareSectionProps {
+  stats: GitHubStats
+  archetype: {
+    title: string
+    icon: string
+    description: string
+    color: {
+      from: string
+      to: string
+    }
+    powerMove: string
+  }
+  achillesHeel: {
+    title: string
+    icon: string
+    color: {
+      from: string
+      to: string
+    }
+    description: string
+    quickTip: string
+  }
+  scores: {
+    score: number
+    topPercentages: {
+      overall: number
+      commits: number
+      additions: number
+      deletions: number
+    }
+    icons: {
+      overall: string
+      commits: string
+      additions: string
+      deletions: string
+    }
+  }
+}
+
+export default function ShareSection({ stats, archetype, achillesHeel, scores }: ShareSectionProps) {
   const [currentUrl, setCurrentUrl] = useState('')
   const [isShareModalOpen, setIsShareModalOpen] = useState(false)
   const [username, setUsername] = useState('')
@@ -83,6 +123,10 @@ export default function ShareSection() {
         isOpen={isShareModalOpen} 
         onOpenChange={setIsShareModalOpen} 
         username={username}
+        stats={stats}
+        archetype={archetype}
+        achillesHeel={achillesHeel}
+        scores={scores}
       />
     </>
   )

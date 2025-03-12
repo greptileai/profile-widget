@@ -20,13 +20,13 @@ export default function ProfileSection({ stats, username, tags }: ProfileSection
     >
       <div className="relative h-[160px]">
         <div className="absolute top-2 left-0 right-0 z-20">
-          <div className="relative w-24 h-24 mb-1">
+          <div className="relative w-24 h-24 mb-1 overflow-hidden rounded-full border-2 border-emerald-500/20">
             <Image
               src={stats.avatarUrl || '/placeholder-avatar.png'}
               alt={`${username}'s profile picture`}
               width={96}
               height={96}
-              className="rounded-full border-2 border-emerald-500/20"
+              className="object-cover w-full h-full"
             />
           </div>
           <h1 className="text-2xl text-white font-medium mb-0.5">

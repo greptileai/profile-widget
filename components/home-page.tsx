@@ -8,8 +8,10 @@ import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import LoadingSkeleton from '@/components/loading-skeleton'
 
+
 export default function HomePage() {
   const [username, setUsername] = useState('')
+  const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
@@ -23,15 +25,14 @@ export default function HomePage() {
     }
     }
     
-
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (username) {
-      const usernamePattern = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
+      const usernamePattern = /^(?!-)(?!.*[^a-z\d-])(?!.*--)[a-z\d-]{1,39}(?<!-)$/i;
       const extractedUser = extractUser(username);
       if (!usernamePattern.test(extractedUser)) {
-        return; // Could add error handling here
+        setError("Invalid username format. Please enter a valid GitHub username.");
+        return; 
       }
 
       startTransition(() => {
@@ -56,10 +57,9 @@ export default function HomePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="mb-12"
-        >
-        </motion.div>
+        ></motion.div>
 
-        <motion.h1 
+        <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -74,20 +74,20 @@ export default function HomePage() {
           transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
           className="text-center text-gray-400 mb-12 text-lg sm:text-xl max-w-2xl"
         >
-          Generate beautiful customized stat widgets for your Github profile in seconds. 
-          Show off your achievements and contributions with style.
+          Generate beautiful customized stat widgets for your Github profile in
+          seconds. Show off your achievements and contributions with style.
         </motion.p>
 
-        <motion.form 
+        <motion.form
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          onSubmit={handleSubmit} 
+          onSubmit={handleSubmit}
           className="flex items-center justify-center gap-4 w-full max-w-xl mx-auto mb-16"
         >
           <div className="relative flex-1">
             <div className="relative">
-              <Image 
+              <Image
                 src="/assets/github-mark-white.png"
                 alt="GitHub"
                 width={20}
@@ -98,22 +98,24 @@ export default function HomePage() {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-[#111111] border border-gray-800 focus:outline-none focus:border-gray-600 focus:ring-1 focus:ring-gray-600 text-gray-300 placeholder:text-gray-600 transition-colors"
+                className="w-full pl-12 pr-4 py-3.5 sm:py-3.5 rounded-xl bg-[#111111] border border-gray-800 focus:outline-none focus:border-gray-600 focus:ring-1 focus:ring-gray-600 text-gray-300 placeholder:text-gray-600 transition-colors"
                 placeholder="Enter your Github username"
               />
+              {error && (
+                <p className="text-red-500 text-sm absolute mt-4">{error}</p>
+              )}
             </div>
           </div>
-          <motion.button 
+          <motion.button
             type="submit"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3.5 rounded-xl font-semibold flex items-center gap-2 transition-colors"
+            className="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-3.5 rounded-xl font-semibold flex items-center gap-2 transition-colors"
           >
             Generate Widget
             <ArrowRight className="w-5 h-5" />
           </motion.button>
         </motion.form>
-
 
         {/* Powered by Footer */}
         <Link href="https://greptile.com">
@@ -124,10 +126,15 @@ export default function HomePage() {
             className="text-gray-500 flex items-center gap-2.5 transition-colors pl-12"
           >
             <span>Powered by</span>
-            <Image src="/assets/greptile-logo.svg" alt="Greptile Logo" width={120} height={120} />
+            <Image
+              src="/assets/greptile-logo.svg"
+              alt="Greptile Logo"
+              width={120}
+              height={120}
+            />
           </motion.div>
         </Link>
       </div>
     </div>
-  )
+  );
 }

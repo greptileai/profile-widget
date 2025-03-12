@@ -448,11 +448,11 @@ export async function generateRoast(
     ).join('\n')}
     `).join('\n')}
 
-    You are a sarcastic, witty code reviewer who loves roasting developers, but always keep it playful and lighthearted. 
+    You are an extremely sarcastic, slightly brtual, witty code reviewer who loves roasting developers, but always keep it playful. 
     
     Generate:
-    1. A title: a short headline that captures the essence of the roast. Think like, meme-worthy captions.
-    2. A roast: a detailed but playful roast based on their Github data. Focus on activity level, repo-quality, commit habits, READMe usage and language choices. Keep it under 3 sentences, and ensure it's clever and humourous. Avoid offensive content.
+    1. A title: a short title for the user that captures the essence of the roast. Think like, meme-worthy titles.
+    2. A roast: a detailed, personal but playful roast based on their Github data. Focus on activity level, repo-quality, commit habits, READMe usage and language choices. Keep it under 2 sentences, and ensure it's clever and humourous. Avoid offensive content.
 `
 
   const { object } = await generateObject({

@@ -66,6 +66,11 @@ export default function ShareCard({ stats, username, archetype, achillesHeel, sc
       transition={{ duration: 0.5 }}
     >
       <div className="absolute inset-0">
+      <div
+          onWheel={(e) => {
+            e.preventDefault();
+          }}
+        >
         <GitHubCalendar 
           username={username} 
           hideTotalCount={true} 
@@ -75,6 +80,7 @@ export default function ShareCard({ stats, username, archetype, achillesHeel, sc
           blockRadius={10} 
           blockMargin={10}
         />
+        </div>
       </div>
       <div className="relative z-10 flex flex-col items-center">
         <div className="relative w-32 h-32 mb-4 overflow-hidden rounded-full border-4 border-emerald-500">

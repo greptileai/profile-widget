@@ -92,7 +92,7 @@ export default function ShareModal({ isOpen, onOpenChange, username, stats, arch
 
 
           {/* Combined Preview Image */}
-          <div className="mt-4" ref={cardRef}>
+          <div className="mt-4 bg-gray-900" ref={cardRef}>
             {isLoading && <Skeleton />}
             <ShareCard 
               key={username}

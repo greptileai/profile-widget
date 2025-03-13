@@ -27,13 +27,13 @@ export default function ArchetypeCard({ archetype }: ArchetypeCardProps) {
       <h2 className="text-gray-400 text-xs uppercase tracking-wider font-medium mb-3">
         Developer Archetype
       </h2>
-      <Card className="bg-gray-900/40 border-gray-800/50 p-4 sm:p-8 overflow-hidden relative min-h-[200px] sm:h-[160px]">
-        <div className="relative flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+      <Card className="bg-gray-900/40 border-gray-800/50 p-5 sm:p-8 overflow-hidden relative min-h-[260px] sm:h-[170px]">
+        <div className="relative flex flex-col sm:flex-row items-start gap-5 sm:gap-6">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-gray-800/50 border border-gray-700/50 flex items-center justify-center"
+            className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gray-800/50 border border-gray-700/50 flex items-center justify-center"
             style={{
               background: `linear-gradient(135deg, ${archetype.color.from}20, ${archetype.color.to}20)`
             }}
@@ -58,7 +58,7 @@ export default function ArchetypeCard({ archetype }: ArchetypeCardProps) {
               {archetype.title}
             </motion.h3>
             <motion.p 
-              className="text-sm sm:text-base text-gray-400 mt-2"
+              className="text-sm sm:text-base text-gray-400 mt-3 sm:mt-2"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
@@ -68,8 +68,10 @@ export default function ArchetypeCard({ archetype }: ArchetypeCardProps) {
           </div>
         </div>
 
+        <div className="h-px bg-gray-800/50 absolute bottom-[68px] sm:bottom-[60px] left-5 sm:left-8 right-5 sm:right-8" />
+
         <motion.div 
-          className="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 right-4 sm:right-8 pt-4 border-t border-gray-800/30"
+          className="absolute bottom-5 sm:bottom-8 left-5 sm:left-8 right-5 sm:right-8 pt-5"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4 }}

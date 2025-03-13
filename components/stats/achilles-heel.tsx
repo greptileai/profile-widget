@@ -227,11 +227,11 @@ export default function AchillesHeel({ achillesHeel, roast, stats }: AchillesHee
                 <span className="text-gray-400">
                   {showRoast ? (
                     <button 
-                      onClick={() => setIsModalOpen(true)}
-                      className="text-gray-300 hover:text-gray-300 transition-colors p-1"
-                    >
-                      <FaRegShareSquare className="w-5 h-5" />
-                    </button>
+                    onClick={() => setIsModalOpen(true)}
+                    className="text-gray-400 hover:text-gray-500 transition-colors p-1 sm:p-1.5"
+                  >
+                    <FaRegShareSquare className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
                   ) : (
                     achillesHeel.quickTip
                   )}

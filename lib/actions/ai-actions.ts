@@ -415,3 +415,61 @@ export async function generateAchillesHeel(
 export type AchillesHeel = ReturnType<typeof generateAchillesHeel>; 
 
 
+const RoastSchema = z.object({
+  title: z.string(),
+  description: z.string()
+})
+
+export async function generateRoast(
+  stats: any, 
+  repositories: any,
+  username: string,
+  isAuthenticated: boolean,
+  shouldRegenerate: boolean = false
+): Promise<z.infer<typeof RoastSchema>> {
+  if (!shouldRegenerate) {
+    const cached = await getCachedData('ai:roast', { username, isAuthenticated })
+    if (cached) return cached as any
+  }
+  
+  const prompt = `Based on these GitHub statistics and repositories:
+    - Total Commits: ${stats.totalCommits}
+    - Lines Added: ${stats.totalAdditions}
+    - Lines Deleted: ${stats.totalDeletions}
+    - Languages Used: ${repositories.flatMap((repo: any) => 
+        repo.languages?.map((lang: any) => lang.name)
+      ).filter(Boolean).join(', ')}
+    ${repositories.map((repo: any) => `
+    Repository: ${repo.name}
+    Description: ${repo.description}
+    Primary Language: ${repo.primaryLanguage}
+    Recent commits: ${repo.recentCommits?.map((commit: any) => 
+      `- ${commit.message}`
+    ).join('\n')}
+    `).join('\n')}
+
+    You are an extremely sarcastic, slightly brtual, witty code reviewer who loves roasting developers, but always keep it playful. 
+    
+    Generate:
+    1. A title: a short title for the user that captures the essence of the roast. Make it 1-3 words and be funny/roasting.
+    2. A roast: a detailed, personal but playful roast based on their Github data. Focus on activity level, repo-quality, commit habits, READMe usage and language choices. Keep it under 2 sentences, and ensure it's clever and humourous. Avoid offensive content.
+`
+
+  const { object } = await generateObject({
+    model: openai("gpt-4o-mini"),
+    schema: z.object({
+      roast: RoastSchema
+    }),
+    prompt
+  });
+  const results = object.roast
+
+  await setCachedData('ai:roast', results, { username, isAuthenticated })
+  return results
+}
+
+// Update type export for use in components
+export type Roast = ReturnType<typeof generateRoast>; 
+
+
+

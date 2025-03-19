@@ -24,6 +24,7 @@ export type CacheKey =
   | 'ai:archetype'
   | 'ai:project'
   | 'ai:weakness'
+  | 'ai:roast'
   | 'github:stats'
   | 'github:fresh'
   | 'scores'
@@ -71,7 +72,8 @@ export async function batchCheckCache(username: string, isAuthenticated: boolean
     'ai:highlights',
     'ai:archetype',
     'ai:project',
-    'ai:weakness'
+    'ai:weakness',
+    'ai:roast'
   ]
   
   // Create array of full cache keys

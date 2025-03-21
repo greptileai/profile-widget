@@ -18,6 +18,8 @@ interface Highlight {
   icon: string;
 }
 
+const system = 'Be a friendly GitHub profile analyser and respond accordingly';
+
 const ContributionSchema = z.object({
   repo: z.string(),
   description: z.string(),
@@ -52,6 +54,7 @@ export async function generateTags(
 
   const { text } = await generateText({
     model: openai("gpt-4o-mini"),
+    system,
     prompt
   })
 
@@ -93,6 +96,7 @@ export async function generateTopContributions(
 
   const { object } = await generateObject({
     model: openai("gpt-4o-mini"),
+    system,
     schema: z.object({
       contributions: z.array(ContributionSchema)
     }),
@@ -156,6 +160,7 @@ export async function generateHighlights(
 
   const { object } = await generateObject({
     model: openai("gpt-4o-mini"),
+    system,
     schema: z.object({
       highlights: z.array(HighlightSchema)
     }),
@@ -247,6 +252,7 @@ export async function generateProgrammerArchtype(
 
   const { object } = await generateObject({
     model: openai("gpt-4o-mini"),
+    system,
     schema: ArchetypeSchema,
     prompt
   });
@@ -306,6 +312,7 @@ export async function generateNextProject(
 
   const { object } = await generateObject({
     model: openai("gpt-4o-mini"),
+    system,
     temperature: 0.8,
     schema: z.object({
       project: ProjectIdeaSchema
@@ -397,6 +404,7 @@ export async function generateAchillesHeel(
 
   const { object } = await generateObject({
     model: openai("gpt-4o-mini"),
+    system,
     schema: WeaknessSchema,
     prompt
   });
@@ -448,8 +456,6 @@ export async function generateRoast(
     ).join('\n')}
     `).join('\n')}
 
-    You are an extremely sarcastic, slightly brtual, witty code reviewer who loves roasting developers, but always keep it playful. 
-    
     Generate:
     1. A title: a short title for the user that captures the essence of the roast. Make it 1-3 words and be funny/roasting.
     2. A roast: a detailed, personal but playful roast based on their Github data. Focus on activity level, repo-quality, commit habits, READMe usage and language choices. Keep it under 2 sentences, and ensure it's clever and humourous. Avoid offensive content.
@@ -457,6 +463,7 @@ export async function generateRoast(
 
   const { object } = await generateObject({
     model: openai("gpt-4o-mini"),
+    system:'You are an extremely sarcastic, slightly brtual, witty code reviewer who loves roasting developers, but always keep it playful.',
     schema: z.object({
       roast: RoastSchema
     }),
